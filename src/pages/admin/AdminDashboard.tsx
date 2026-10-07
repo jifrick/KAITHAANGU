@@ -21,6 +21,13 @@ export const AdminDashboard: React.FC = () => {
         <p style={{ color: 'var(--text-muted)' }}>Welcome to the KAITHAANGU administration hub.</p>
       </div>
 
+      {!isContentAdmin && !isVerificationAdmin && !isMatchingAdmin && !isSupportModerator && (
+        <div style={{ padding: '2rem', background: '#fee2e2', color: '#b91c1c', borderRadius: '8px', marginTop: '2rem', border: '1px solid #fca5a5' }}>
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Configuration Required</h2>
+          <p>Your admin account is configured, but no admin permissions have been assigned. Please contact a Super Admin.</p>
+        </div>
+      )}
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
         
         {isVerificationAdmin && (
@@ -64,6 +71,15 @@ export const AdminDashboard: React.FC = () => {
             <div className="dashboard-card" style={{ cursor: 'pointer', borderTop: '4px solid #d97706', height: '100%' }}>
               <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: '#d97706' }}>Reports</h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Handle user reports regarding bad behavior, broken items, or disputes.</p>
+            </div>
+          </Link>
+        )}
+
+        {profile?.admin_role === 'super_admin' && (
+          <Link to="/admin/audit" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="dashboard-card" style={{ cursor: 'pointer', borderTop: '4px solid #475569', height: '100%' }}>
+              <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: '#475569' }}>Audit Logs</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Immutable record of critical administrative actions.</p>
             </div>
           </Link>
         )}

@@ -12,6 +12,7 @@ import { RecipientVerification } from './pages/admin/RecipientVerification';
 import { MatchingDashboard } from './pages/admin/MatchingDashboard';
 import { ReportsDashboard } from './pages/admin/ReportsDashboard';
 import { AccountApprovals } from './pages/admin/AccountApprovals';
+import { AuditLogs } from './pages/admin/AuditLogs';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { BrowseItems } from './pages/BrowseItems';
 import { ItemView } from './pages/ItemView';
@@ -105,6 +106,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <AccountApprovals />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/audit" 
+        element={
+          <ProtectedRoute>
+            <AuditLogs />
           </ProtectedRoute>
         } 
       />

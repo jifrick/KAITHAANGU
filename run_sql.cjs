@@ -12,7 +12,7 @@ async function run() {
     await client.connect();
     console.log('Connected to database.');
 
-    const sql = fs.readFileSync('make_admin.sql', 'utf8');
+    const sql = fs.readFileSync('storage_security.sql', 'utf8');
     await client.query(sql);
     console.log('SQL executed successfully!');
   } catch (error) {

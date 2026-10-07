@@ -8,6 +8,9 @@ export const AccountApprovals: React.FC = () => {
   const { profile } = useAuth();
   const [users, setUsers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [error, setError] = useState<string | null>(null);
 
   // Verification admins and Super admins can access
   const isAuthorized = profile?.role === 'admin' && 
@@ -20,17 +23,27 @@ export const AccountApprovals: React.FC = () => {
 
   const loadUsers = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .neq('role', 'admin')
-      .order('created_at', { ascending: false });
+    setError(null);
+    let query = supabase.from('profiles').select('*').neq('role', 'admin').order('created_at', { ascending: false });
+    
+    if (statusFilter !== 'all') query = query.eq('account_status', statusFilter);
+    if (roleFilter !== 'all') query = query.eq('role', roleFilter);
 
-    if (!error && data) {
+    const { data, error } = await query;
+
+    if (error) {
+      setError(error.message);
+    } else if (data) {
       setUsers(data as Profile[]);
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (isAuthorized) {
+      loadUsers();
+    }
+  }, [statusFilter, roleFilter]);
 
   const handleStatusChange = async (userId: string, newStatus: AccountStatus) => {
     const { error } = await supabase
@@ -58,7 +71,32 @@ export const AccountApprovals: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1>Account Approvals</h1>
+        <h1>User Management</h1>
+        <p style={{ color: 'var(--text-muted)' }}>Manage all platform users, approvals, and suspensions.</p>
+      </div>
+
+      {error && <div style={{ padding: '1rem', background: '#fee2e2', color: '#b91c1c', borderRadius: '8px', marginBottom: '1rem' }}>{error}</div>}
+
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <label style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Account Status</label>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending Approval</option>
+            <option value="approved">Approved</option>
+            <option value="suspended">Suspended</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <label style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Intent (Role)</label>
+          <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+            <option value="all">All Roles</option>
+            <option value="donor">Donor</option>
+            <option value="recipient">Recipient</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
       </div>
       
       {loading ? (
@@ -109,6 +147,9 @@ export const AccountApprovals: React.FC = () => {
                     )}
                     {u.account_status === 'approved' && (
                       <button onClick={() => handleStatusChange(u.id, 'suspended')} className="btn" style={{ backgroundColor: '#f59e0b', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.9rem' }}>Suspend</button>
+                    )}
+                    {(u.account_status === 'suspended' || u.account_status === 'rejected') && (
+                      <button onClick={() => handleStatusChange(u.id, 'approved')} className="btn" style={{ backgroundColor: '#10b981', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.9rem' }}>Restore (Approve)</button>
                     )}
                   </td>
                 </tr>
