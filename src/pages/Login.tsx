@@ -15,7 +15,7 @@ export const Login: React.FC = () => {
 
   if (user && profile) {
     if (profile.role === 'admin') {
-      return <Navigate to="/admin" replace />;
+      return <Navigate to="/admin/dashboard" replace />;
     }
     return <Navigate to="/dashboard" replace />;
   }
