@@ -25,8 +25,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (loading) return <div className="loader-container">Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
-  if (profile && !profile.profile_completed && profile.role !== 'admin') return <Navigate to="/complete-profile" replace />;
-  if (profile && profile.role !== 'admin' && profile.account_status !== 'approved') {
+  
+  // Guard against race conditions where user is set but profile hasn't finished fetching
+  if (!profile) return <div className="loader-container">Loading profile...</div>;
+
+  if (!profile.profile_completed && profile.role !== 'admin') return <Navigate to="/complete-profile" replace />;
+  if (profile.role !== 'admin' && profile.account_status !== 'approved') {
     return <Navigate to="/account-status" replace />;
   }
   
@@ -38,7 +42,11 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (loading) return <div className="loader-container">Loading...</div>;
   if (!user) return <Navigate to="/admin" replace />;
-  if (profile && profile.role !== 'admin') {
+  
+  // Guard against race conditions where user is set but profile hasn't finished fetching
+  if (!profile) return <div className="loader-container">Loading profile...</div>;
+
+  if (profile.role !== 'admin') {
     return <Navigate to="/dashboard" replace />;
   }
   
