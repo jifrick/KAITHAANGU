@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 export const Login: React.FC = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
@@ -13,7 +13,10 @@ export const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  if (user) {
+  if (user && profile) {
+    if (profile.role === 'admin') {
+      return <Navigate to="/admin" replace />;
+    }
     return <Navigate to="/dashboard" replace />;
   }
 

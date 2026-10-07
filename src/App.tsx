@@ -12,6 +12,7 @@ import { RecipientVerification } from './pages/admin/RecipientVerification';
 import { MatchingDashboard } from './pages/admin/MatchingDashboard';
 import { ReportsDashboard } from './pages/admin/ReportsDashboard';
 import { AccountApprovals } from './pages/admin/AccountApprovals';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { BrowseItems } from './pages/BrowseItems';
 import { ItemView } from './pages/ItemView';
 import { AccountStatus } from './pages/AccountStatus';
@@ -22,7 +23,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (loading) return <div className="loader-container">Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
-  if (profile && !profile.profile_completed) return <Navigate to="/complete-profile" replace />;
+  if (profile && !profile.profile_completed && profile.role !== 'admin') return <Navigate to="/complete-profile" replace />;
   if (profile && profile.role !== 'admin' && profile.account_status !== 'approved') {
     return <Navigate to="/account-status" replace />;
   }
@@ -64,6 +65,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <CreateItem />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
           </ProtectedRoute>
         } 
       />
@@ -134,7 +143,11 @@ const Navigation = () => {
         <Link to="/items">Browse Items</Link>
         {user ? (
           <>
-            <Link to="/dashboard">Dashboard</Link>
+            {profile?.role === 'admin' ? (
+              <Link to="/admin">Admin Panel</Link>
+            ) : (
+              <Link to="/dashboard">Dashboard</Link>
+            )}
             {isContentAdmin && (
               <Link to="/admin/moderation" style={{ color: 'var(--danger)', fontWeight: 'bold' }}>
                 Moderation
