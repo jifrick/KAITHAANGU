@@ -28,6 +28,7 @@ export const CompleteProfile: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   if (!user) return <Navigate to="/login" replace />;
+  if (profile?.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
   if (profile?.profile_completed) return <Navigate to="/dashboard" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {

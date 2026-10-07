@@ -29,8 +29,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   // Guard against race conditions where user is set but profile hasn't finished fetching
   if (!profile) return <div className="loader-container">Loading profile...</div>;
 
-  if (!profile.profile_completed && profile.role !== 'admin') return <Navigate to="/complete-profile" replace />;
-  if (profile.role !== 'admin' && profile.account_status !== 'approved') {
+  // Admin users bypass normal user onboarding and go straight to admin dashboard
+  if (profile.role === 'admin') {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  if (!profile.profile_completed) return <Navigate to="/complete-profile" replace />;
+  if (profile.account_status !== 'approved') {
     return <Navigate to="/account-status" replace />;
   }
   

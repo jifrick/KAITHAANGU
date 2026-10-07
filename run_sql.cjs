@@ -12,7 +12,7 @@ async function run() {
     await client.connect();
     console.log('Connected to database.');
 
-    const sql = fs.readFileSync('reset_rls.sql', 'utf8');
+    const sql = fs.readFileSync('supabase/migrations/20261007000000_fix_auth_rls_admin.sql', 'utf8');
     await client.query(sql);
     console.log('SQL executed successfully!');
   } catch (error) {

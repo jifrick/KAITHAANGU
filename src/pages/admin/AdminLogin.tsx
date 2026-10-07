@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [adminIdInput, setAdminIdInput] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,19 +26,26 @@ export const AdminLogin: React.FC = () => {
     setLoading(true);
     setError(null);
 
+    const inputClean = adminIdInput.trim().toLowerCase();
+
+    // Map dedicated Admin ID to the registered Super Admin email
+    let targetEmail = inputClean;
+    if (inputClean === 'kaithaangu-admin') {
+      targetEmail = 'jifri.chakkalan@gmail.com';
+    }
+
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email: email.trim().toLowerCase(),
+      email: targetEmail,
       password,
     });
 
     if (signInError) {
-      setError('Invalid email or password.');
+      setError('Invalid Admin ID / Email or password.');
       setLoading(false);
       return;
     }
 
-    // Verify this account actually has admin role
-    // Use the access_token from the sign-in response directly so RLS auth.uid() is correct
+    // Verify this account actually has admin role in database
     if (data.user && data.session) {
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
@@ -47,9 +54,9 @@ export const AdminLogin: React.FC = () => {
         .single();
 
       if (profileError) {
-        console.error('Profile fetch error:', profileError);
+        console.error('Profile fetch error during admin login:', profileError);
         await supabase.auth.signOut();
-        setError('Could not verify admin privileges. Please try again.');
+        setError('Could not verify admin privileges. Please check database permissions.');
         setLoading(false);
         return;
       }
@@ -61,7 +68,7 @@ export const AdminLogin: React.FC = () => {
         return;
       }
 
-      // Valid admin — navigate to dashboard
+      // Valid admin — navigate directly to admin dashboard
       navigate('/admin/dashboard');
     }
   };
@@ -123,15 +130,15 @@ export const AdminLogin: React.FC = () => {
               marginBottom: '0.5rem',
               letterSpacing: '1px'
             }}>
-              EMAIL
+              ADMIN ID OR EMAIL
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@example.com"
+              type="text"
+              value={adminIdInput}
+              onChange={(e) => setAdminIdInput(e.target.value)}
+              placeholder="kaithaangu-admin"
               required
-              autoComplete="email"
+              autoComplete="username"
               style={{
                 width: '100%',
                 padding: '0.75rem',

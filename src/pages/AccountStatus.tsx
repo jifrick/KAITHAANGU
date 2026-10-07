@@ -8,7 +8,11 @@ export const AccountStatus: React.FC = () => {
   if (loading) return <div className="loader-container">Loading...</div>;
   if (!user || !profile) return <Navigate to="/login" replace />;
 
-  if (profile.account_status === 'approved' || profile.role === 'admin') {
+  if (profile.role === 'admin') {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  if (profile.account_status === 'approved') {
     return <Navigate to="/dashboard" replace />;
   }
 
