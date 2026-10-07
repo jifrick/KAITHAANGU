@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
@@ -15,6 +15,7 @@ import { AccountApprovals } from './pages/admin/AccountApprovals';
 import { BrowseItems } from './pages/BrowseItems';
 import { ItemView } from './pages/ItemView';
 import { AccountStatus } from './pages/AccountStatus';
+import { UpdatePassword } from './pages/UpdatePassword';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, profile, loading } = useAuth();
@@ -30,10 +31,20 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const AppRoutes = () => {
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    // Automatically redirect to update-password if they click a recovery link
+    if (window.location.hash.includes('type=recovery')) {
+      navigate('/update-password');
+    }
+  }, [navigate]);
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/update-password" element={<UpdatePassword />} />
       <Route path="/complete-profile" element={<CompleteProfile />} />
       <Route path="/account-status" element={<AccountStatus />} />
       <Route path="/items" element={<BrowseItems />} />
