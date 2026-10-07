@@ -38,15 +38,23 @@ export const AdminLogin: React.FC = () => {
     }
 
     // Verify this account actually has admin role
-    if (data.user) {
+    // Use the access_token from the sign-in response directly so RLS auth.uid() is correct
+    if (data.user && data.session) {
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('role, admin_role, account_status')
         .eq('id', data.user.id)
         .single();
 
-      if (profileError || !profileData || profileData.role !== 'admin') {
-        // Sign them back out — not an admin
+      if (profileError) {
+        console.error('Profile fetch error:', profileError);
+        await supabase.auth.signOut();
+        setError('Could not verify admin privileges. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      if (!profileData || profileData.role !== 'admin') {
         await supabase.auth.signOut();
         setError('Access denied. This account does not have admin privileges.');
         setLoading(false);
