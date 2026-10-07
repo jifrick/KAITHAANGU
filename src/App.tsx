@@ -14,6 +14,7 @@ import { ReportsDashboard } from './pages/admin/ReportsDashboard';
 import { AccountApprovals } from './pages/admin/AccountApprovals';
 import { AuditLogs } from './pages/admin/AuditLogs';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AdminLogin } from './pages/admin/AdminLogin';
 import { BrowseItems } from './pages/BrowseItems';
 import { ItemView } from './pages/ItemView';
 import { AccountStatus } from './pages/AccountStatus';
@@ -27,6 +28,18 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   if (profile && !profile.profile_completed && profile.role !== 'admin') return <Navigate to="/complete-profile" replace />;
   if (profile && profile.role !== 'admin' && profile.account_status !== 'approved') {
     return <Navigate to="/account-status" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, profile, loading } = useAuth();
+  
+  if (loading) return <div className="loader-container">Loading...</div>;
+  if (!user) return <Navigate to="/admin" replace />;
+  if (profile && profile.role !== 'admin') {
+    return <Navigate to="/dashboard" replace />;
   }
   
   return <>{children}</>;
@@ -69,60 +82,65 @@ const AppRoutes = () => {
           </ProtectedRoute>
         } 
       />
+      
+      {/* Admin Authentication Route */}
+      <Route path="/admin" element={<AdminLogin />} />
+
+      {/* Protected Admin Routes */}
       <Route 
-        path="/admin" 
+        path="/admin/dashboard" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <AdminDashboard />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route 
         path="/admin/moderation" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <ItemModeration />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route 
         path="/admin/verification" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <RecipientVerification />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route 
         path="/admin/matching" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <MatchingDashboard />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route 
         path="/admin/accounts" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <AccountApprovals />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route 
         path="/admin/audit" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <AuditLogs />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route 
         path="/admin/reports" 
         element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <ReportsDashboard />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } 
       />
       <Route path="*" element={<Navigate to="/" replace />} />
@@ -153,7 +171,7 @@ const Navigation = () => {
         {user ? (
           <>
             {profile?.role === 'admin' ? (
-              <Link to="/admin">Admin Panel</Link>
+              <Link to="/admin/dashboard">Admin Panel</Link>
             ) : (
               <Link to="/dashboard">Dashboard</Link>
             )}
