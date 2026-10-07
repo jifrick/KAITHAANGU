@@ -1,0 +1,3 @@
+-- Add INSERT policy to profiles so upsert() works correctly
+CREATE POLICY "Users can insert their own profile" ON public.profiles 
+FOR INSERT WITH CHECK (auth.uid() = id);
