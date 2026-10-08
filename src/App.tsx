@@ -19,6 +19,7 @@ import { BrowseItems } from './pages/BrowseItems';
 import { ItemView } from './pages/ItemView';
 import { AccountStatus } from './pages/AccountStatus';
 import { UpdatePassword } from './pages/UpdatePassword';
+import { Brand } from './components/common/Brand';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, profile, loading } = useAuth();
@@ -178,7 +179,7 @@ const Navigation = () => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="nav-brand">KAITHAANGU</Link>
+      <Brand size="sm" clickable={true} />
       <div className="nav-links">
         <Link to="/items">Browse Items</Link>
         {user ? (
