@@ -8,14 +8,7 @@ import { Button } from '../components/ui/Button';
 
 export const Login: React.FC = () => {
   const { user, profile } = useAuth();
-  
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
 
   if (user && profile) {
     if (profile.role === 'admin') {
@@ -33,57 +26,8 @@ export const Login: React.FC = () => {
       });
       if (error) throw error;
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Google ലോഗിൻ ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.');
     }
-  };
-
-  const handleEmailAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setMessage(null);
-    setLoading(true);
-
-    try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: window.location.origin + '/dashboard'
-          }
-        });
-        if (error) throw error;
-        setMessage('നിങ്ങളുടെ ഇമെയിൽ വിലാസത്തിലേക്ക് കൺഫർമേഷൻ ലിങ്ക് അയച്ചിട്ടുണ്ട്. ദയവായി ഇമെയിൽ പരിശോധിക്കുക.');
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-        if (error) throw error;
-      }
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getFriendlyError = (rawError: string | null) => {
-    if (!rawError) return null;
-    const lower = rawError.toLowerCase();
-    if (lower.includes('invalid login credentials') || lower.includes('invalid_grant')) {
-      return 'ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ് ശരിയല്ല. (Invalid login credentials)';
-    }
-    if (lower.includes('user already registered') || lower.includes('already exists')) {
-      return 'ഈ ഇമെയിൽ വിലാസത്തിൽ ഇതിനകം അക്കൗണ്ട് ഉണ്ട്. ലോഗിൻ ചെയ്യുക.';
-    }
-    if (lower.includes('password should be at least')) {
-      return 'പാസ്‌വേഡിൽ കുറഞ്ഞത് 6 അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം.';
-    }
-    if (lower.includes('rate limit') || lower.includes('too many requests')) {
-      return 'കൂടുതൽ ശ്രമങ്ങൾ നടന്നു. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കുക.';
-    }
-    return rawError;
   };
 
   return (
@@ -184,7 +128,7 @@ export const Login: React.FC = () => {
                 marginBottom: 'var(--space-2)',
                 fontFamily: 'var(--font-malayalam)'
               }}>
-                {isSignUp ? 'പുതിയ അക്കൗണ്ട് സൃഷ്ടിക്കുക' : 'പ്രവേശിക്കുക'}
+                പ്രവേശിക്കുക
               </h2>
               <p style={{
                 fontSize: 'var(--fs-body)',
@@ -192,9 +136,7 @@ export const Login: React.FC = () => {
                 margin: 0,
                 fontFamily: 'var(--font-malayalam)'
               }}>
-                {isSignUp 
-                  ? 'സൗജന്യമായി സാധനങ്ങൾ നൽകാനും സ്വീകരിക്കാനും ചേരൂ.' 
-                  : 'തുടരാനായി നിങ്ങളുടെ അക്കൗണ്ടിലേക്ക് ലോഗിൻ ചെയ്യുക.'}
+                സൗജന്യമായി സാധനങ്ങൾ നൽകാനും സ്വീകരിക്കാനും Google ഉപയോഗിച്ച് തുടരുക.
               </p>
             </div>
 
@@ -214,27 +156,7 @@ export const Login: React.FC = () => {
                 gap: '8px'
               }}>
                 <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚠️</span>
-                <span style={{ flex: 1 }}>{getFriendlyError(error)}</span>
-              </div>
-            )}
-
-            {/* Success Message Alert */}
-            {message && (
-              <div style={{
-                background: 'var(--success-bg)',
-                border: '1px solid var(--success-border)',
-                color: 'var(--success-text)',
-                padding: 'var(--space-3) var(--space-4)',
-                borderRadius: 'var(--radius-md)',
-                marginBottom: 'var(--space-5)',
-                fontSize: 'var(--fs-body-sm)',
-                fontFamily: 'var(--font-malayalam)',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '8px'
-              }}>
-                <span style={{ fontSize: '1rem', lineHeight: 1 }}>✅</span>
-                <span style={{ flex: 1 }}>{message}</span>
+                <span style={{ flex: 1 }}>{error}</span>
               </div>
             )}
 
@@ -246,7 +168,6 @@ export const Login: React.FC = () => {
               size="lg"
               fullWidth
               style={{
-                marginBottom: 'var(--space-5)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -254,7 +175,8 @@ export const Login: React.FC = () => {
                 borderColor: 'var(--soft-gray)',
                 color: 'var(--ink)',
                 fontWeight: 600,
-                fontSize: '0.95rem'
+                fontSize: '0.95rem',
+                padding: '0.85rem 1rem'
               }}
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -265,216 +187,6 @@ export const Login: React.FC = () => {
               </svg>
               <span>Continue with Google</span>
             </Button>
-
-            {/* Divider */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: 'var(--space-5)',
-              gap: 'var(--space-3)'
-            }}>
-              <div style={{ flex: 1, height: '1px', background: 'var(--soft-gray)' }} />
-              <span style={{
-                fontSize: 'var(--fs-caption)',
-                color: 'var(--ink-muted)',
-                fontWeight: 600,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-malayalam)'
-              }}>
-                അല്ലെങ്കിൽ ഇമെയിൽ വഴി
-              </span>
-              <div style={{ flex: 1, height: '1px', background: 'var(--soft-gray)' }} />
-            </div>
-
-            {/* Email & Password Form */}
-            <form onSubmit={handleEmailAuth} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-              {/* Email Field */}
-              <div className="form-group">
-                <label style={{
-                  display: 'block',
-                  marginBottom: 'var(--space-1)',
-                  fontSize: 'var(--fs-label)',
-                  fontWeight: 600,
-                  color: 'var(--ink)',
-                  fontFamily: 'var(--font-malayalam)'
-                }}>
-                  ഇമെയിൽ വിലാസം (Email Address)
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: 'var(--space-3) var(--space-4)',
-                      paddingLeft: '38px',
-                      borderRadius: 'var(--radius-md)',
-                      border: '1px solid var(--soft-gray)',
-                      fontSize: 'var(--fs-body)',
-                      color: 'var(--ink)',
-                      background: 'var(--cloud-white)',
-                      outline: 'none',
-                      transition: 'var(--transition-fast)'
-                    }}
-                  />
-                  <span style={{
-                    position: 'absolute',
-                    left: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    fontSize: '1rem',
-                    color: 'var(--ink-muted)'
-                  }}>
-                    ✉️
-                  </span>
-                </div>
-              </div>
-
-              {/* Password Field */}
-              <div className="form-group">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-1)' }}>
-                  <label style={{
-                    fontSize: 'var(--fs-label)',
-                    fontWeight: 600,
-                    color: 'var(--ink)',
-                    fontFamily: 'var(--font-malayalam)'
-                  }}>
-                    പാസ്‌വേഡ് (Password)
-                  </label>
-                </div>
-                
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    minLength={6}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: 'var(--space-3) var(--space-4)',
-                      paddingRight: '44px',
-                      borderRadius: 'var(--radius-md)',
-                      border: '1px solid var(--soft-gray)',
-                      fontSize: 'var(--fs-body)',
-                      color: 'var(--ink)',
-                      background: 'var(--cloud-white)',
-                      outline: 'none',
-                      transition: 'var(--transition-fast)'
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    title={showPassword ? 'Hide password' : 'Show password'}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    style={{
-                      position: 'absolute',
-                      right: '8px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '6px 8px',
-                      fontSize: '1.1rem',
-                      color: 'var(--ink-muted)',
-                      borderRadius: 'var(--radius-sm)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                  </button>
-                </div>
-                {isSignUp && (
-                  <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--ink-muted)', marginTop: '4px' }}>
-                    കുറഞ്ഞത് 6 അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം
-                  </div>
-                )}
-              </div>
-
-              {/* Submit CTA */}
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
-                disabled={loading}
-                style={{ marginTop: 'var(--space-2)' }}
-              >
-                {loading ? (
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-malayalam)' }}>
-                    <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <circle cx="12" cy="12" r="10" strokeWidth="4" strokeDasharray="32" strokeDashoffset="10" />
-                    </svg>
-                    {isSignUp ? 'അക്കൗണ്ട് സൃഷ്ടിക്കുന്നു...' : 'പ്രവേശിക്കുന്നു...'}
-                  </span>
-                ) : (
-                  <span style={{ fontFamily: 'var(--font-malayalam)', fontWeight: 600 }}>
-                    {isSignUp ? 'അക്കൗണ്ട് സൃഷ്ടിക്കുക' : 'പ്രവേശിക്കുക'}
-                  </span>
-                )}
-              </Button>
-            </form>
-
-            {/* Footer Switcher */}
-            <div style={{
-              marginTop: 'var(--space-6)',
-              paddingTop: 'var(--space-5)',
-              borderTop: '1px solid var(--soft-gray)',
-              textAlign: 'center',
-              fontSize: 'var(--fs-body-sm)',
-              fontFamily: 'var(--font-malayalam)',
-              color: 'var(--ink-secondary)'
-            }}>
-              {isSignUp ? (
-                <span>
-                  ഇതിനകം അക്കൗണ്ട് ഉണ്ടോ?{' '}
-                  <button
-                    type="button"
-                    onClick={() => { setIsSignUp(false); setError(null); setMessage(null); }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--primary-blue)',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      padding: 0,
-                      textDecoration: 'underline'
-                    }}
-                  >
-                    ലോഗിൻ ചെയ്യുക
-                  </button>
-                </span>
-              ) : (
-                <span>
-                  അക്കൗണ്ട് ഇല്ലേ?{' '}
-                  <button
-                    type="button"
-                    onClick={() => { setIsSignUp(true); setError(null); setMessage(null); }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--primary-blue)',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      padding: 0,
-                      textDecoration: 'underline'
-                    }}
-                  >
-                    പുതിയ അക്കൗണ്ട് തുടങ്ങൂ
-                  </button>
-                </span>
-              )}
-            </div>
           </Card>
 
           {/* Privacy Note Footer */}
@@ -492,4 +204,5 @@ export const Login: React.FC = () => {
     </div>
   );
 };
+
 

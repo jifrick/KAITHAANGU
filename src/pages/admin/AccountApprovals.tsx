@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { AdminLayout } from '../../components/common/AdminLayout';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Input, Select } from '../../components/ui/Input';
 import type { Profile, AccountStatus } from '../../types/database';
 
 export const AccountApprovals: React.FC = () => {
@@ -10,6 +15,7 @@ export const AccountApprovals: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   // Verification admins and Super admins can access
@@ -19,7 +25,7 @@ export const AccountApprovals: React.FC = () => {
   useEffect(() => {
     if (!isAuthorized) return;
     loadUsers();
-  }, [isAuthorized]);
+  }, [isAuthorized, statusFilter, roleFilter]);
 
   const loadUsers = async () => {
     setLoading(true);
@@ -39,13 +45,10 @@ export const AccountApprovals: React.FC = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (isAuthorized) {
-      loadUsers();
-    }
-  }, [statusFilter, roleFilter]);
-
   const handleStatusChange = async (userId: string, newStatus: AccountStatus) => {
+    const confirmMsg = `Are you sure you want to change this user status to ${newStatus.toUpperCase()}?`;
+    if (!window.confirm(confirmMsg)) return;
+
     const { error } = await supabase
       .from('profiles')
       .update({ account_status: newStatus })
@@ -68,103 +71,191 @@ export const AccountApprovals: React.FC = () => {
 
   if (!isAuthorized) return <Navigate to="/dashboard" replace />;
 
+  const filteredUsers = users.filter(u => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      (u.name && u.name.toLowerCase().includes(q)) ||
+      (u.phone && u.phone.toLowerCase().includes(q)) ||
+      (u.address && u.address.toLowerCase().includes(q))
+    );
+  });
+
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>User Management</h1>
-        <p style={{ color: 'var(--text-muted)' }}>Manage all platform users, approvals, and suspensions.</p>
-      </div>
-
-      {error && <div style={{ padding: '1rem', background: '#fee2e2', color: '#b91c1c', borderRadius: '8px', marginBottom: '1rem' }}>{error}</div>}
-
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Account Status</label>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
-            <option value="all">All Statuses</option>
-            <option value="pending">Pending Approval</option>
-            <option value="approved">Approved</option>
-            <option value="suspended">Suspended</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Intent (Role)</label>
-          <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
-            <option value="all">All Roles</option>
-            <option value="donor">Donor</option>
-            <option value="recipient">Recipient</option>
-            <option value="both">Both</option>
-          </select>
-        </div>
-      </div>
-      
-      {loading ? (
-        <div className="loader-container">Loading accounts...</div>
-      ) : (
-        <div className="dashboard-card" style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                <th style={{ padding: '1rem' }}>Name</th>
-                <th style={{ padding: '1rem' }}>Phone</th>
-                <th style={{ padding: '1rem' }}>Intent (Role)</th>
-                <th style={{ padding: '1rem' }}>Joined</th>
-                <th style={{ padding: '1rem' }}>Status</th>
-                <th style={{ padding: '1rem' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '1rem' }}>{u.name || 'Anonymous'}</td>
-                  <td style={{ padding: '1rem' }}>{u.phone || 'N/A'}</td>
-                  <td style={{ padding: '1rem', textTransform: 'capitalize' }}>{u.role}</td>
-                  <td style={{ padding: '1rem' }}>{new Date(u.created_at).toLocaleDateString()}</td>
-                  <td style={{ padding: '1rem' }}>
-                    <span style={{ 
-                      padding: '4px 8px', 
-                      borderRadius: '12px', 
-                      fontSize: '0.85rem',
-                      backgroundColor: 
-                        u.account_status === 'approved' ? '#d1fae5' : 
-                        u.account_status === 'pending' ? '#fef3c7' : 
-                        u.account_status === 'rejected' ? '#fee2e2' : '#f3f4f6',
-                      color: 
-                        u.account_status === 'approved' ? '#065f46' : 
-                        u.account_status === 'pending' ? '#92400e' : 
-                        u.account_status === 'rejected' ? '#991b1b' : '#374151'
-                    }}>
-                      {u.account_status.toUpperCase()}
-                    </span>
-                  </td>
-                  <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem' }}>
-                    {u.account_status === 'pending' && (
-                      <>
-                        <button onClick={() => handleStatusChange(u.id, 'approved')} className="btn" style={{ backgroundColor: '#10b981', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.9rem' }}>Approve</button>
-                        <button onClick={() => handleStatusChange(u.id, 'rejected')} className="btn" style={{ backgroundColor: 'var(--danger)', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.9rem' }}>Reject</button>
-                      </>
-                    )}
-                    {u.account_status === 'approved' && (
-                      <button onClick={() => handleStatusChange(u.id, 'suspended')} className="btn" style={{ backgroundColor: '#f59e0b', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.9rem' }}>Suspend</button>
-                    )}
-                    {(u.account_status === 'suspended' || u.account_status === 'rejected') && (
-                      <button onClick={() => handleStatusChange(u.id, 'approved')} className="btn" style={{ backgroundColor: '#10b981', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.9rem' }}>Restore (Approve)</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                    No users found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+    <AdminLayout
+      title="User Account Approvals"
+      subtitle="കൈത്താങ് പ്ലാറ്റ്‌ഫോമിൽ പുതിയതായി രജിസ്റ്റർ ചെയ്ത യൂസർമാരുടെ പ്രൊഫൈലുകളും അവസ്ഥകളും അവലോകനം ചെയ്യുക."
+      actions={
+        <Button size="sm" variant="outline" onClick={loadUsers} disabled={loading}>
+          🔄 Refresh
+        </Button>
+      }
+    >
+      {/* Error Banner */}
+      {error && (
+        <Card style={{ background: 'var(--error-bg)', border: '1px solid var(--error-border)', color: 'var(--error-text)', marginBottom: 'var(--space-5)' }}>
+          ⚠️ {error}
+        </Card>
       )}
-    </div>
+
+      {/* Filter and Search Bar */}
+      <Card style={{ padding: 'var(--space-4) var(--space-5)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-6)' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: 'var(--space-4)',
+          alignItems: 'end'
+        }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: 'var(--fs-label)', fontWeight: 600, color: 'var(--ink)' }}>
+              Search Users
+            </label>
+            <Input
+              type="text"
+              placeholder="Search by name or phone..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              style={{ padding: '8px 12px' }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: 'var(--fs-label)', fontWeight: 600, color: 'var(--ink)' }}>
+              Account Status
+            </label>
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              options={[
+                { value: 'all', label: 'All Statuses' },
+                { value: 'pending', label: 'Pending Approval (പരിശോധനയിൽ)' },
+                { value: 'approved', label: 'Approved (അംഗീകരിച്ചത്)' },
+                { value: 'suspended', label: 'Suspended (സസ്പെൻഡ് ചെയ്തത്)' },
+                { value: 'rejected', label: 'Rejected (നിരസിച്ചത്)' }
+              ]}
+              style={{ padding: '8px 12px' }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: 'var(--fs-label)', fontWeight: 600, color: 'var(--ink)' }}>
+              Intent (Role)
+            </label>
+            <Select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              options={[
+                { value: 'all', label: 'All Roles' },
+                { value: 'donor', label: 'Donor (നൽകുന്നയാൾ)' },
+                { value: 'recipient', label: 'Recipient (സ്വീകർത്താവ്)' },
+                { value: 'both', label: 'Both (രണ്ടും)' }
+              ]}
+              style={{ padding: '8px 12px' }}
+            />
+          </div>
+        </div>
+      </Card>
+
+      {/* Table / List Container */}
+      {loading ? (
+        <Card style={{ padding: 'var(--space-8)', textAlign: 'center', color: 'var(--ink-muted)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+            <svg className="animate-spin" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)">
+              <circle cx="12" cy="12" r="10" strokeWidth="4" strokeDasharray="32" strokeDashoffset="10" />
+            </svg>
+            <span>യൂസർ പ്രൊഫൈലുകൾ ലോഡ് ചെയ്യുന്നു...</span>
+          </div>
+        </Card>
+      ) : (
+        <Card style={{
+          boxShadow: 'var(--shadow-md)',
+          borderRadius: 'var(--radius-xl)',
+          border: '1px solid var(--soft-gray)',
+          overflow: 'hidden',
+          padding: 0
+        }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 'var(--fs-body-sm)' }}>
+              <thead>
+                <tr style={{ background: 'var(--soft-blue)', borderBottom: '1px solid var(--soft-blue-border)', color: 'var(--ink)' }}>
+                  <th style={{ padding: 'var(--space-4)' }}>User Details</th>
+                  <th style={{ padding: 'var(--space-4)' }}>Phone / Address</th>
+                  <th style={{ padding: 'var(--space-4)' }}>Intent</th>
+                  <th style={{ padding: 'var(--space-4)' }}>Joined Date</th>
+                  <th style={{ padding: 'var(--space-4)' }}>Status</th>
+                  <th style={{ padding: 'var(--space-4)', textAlign: 'right' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers.map(u => (
+                  <tr key={u.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                    <td style={{ padding: 'var(--space-4)' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--ink)', fontSize: '0.95rem' }}>{u.name || 'Anonymous User'}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--ink-muted)' }}>ID: {u.id.substring(0, 8)}...</div>
+                    </td>
+
+                    <td style={{ padding: 'var(--space-4)', color: 'var(--ink-secondary)' }}>
+                      <div>📞 {u.phone || 'N/A'}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', marginTop: '2px', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        📍 {u.address || 'Location not specified'}
+                      </div>
+                    </td>
+
+                    <td style={{ padding: 'var(--space-4)' }}>
+                      <Badge 
+                        status={u.role === 'donor' ? 'info' : u.role === 'recipient' ? 'rose' : 'pending'} 
+                        label={u.role.toUpperCase()} 
+                      />
+                    </td>
+
+                    <td style={{ padding: 'var(--space-4)', color: 'var(--ink-muted)' }}>
+                      {new Date(u.created_at).toLocaleDateString()}
+                    </td>
+
+                    <td style={{ padding: 'var(--space-4)' }}>
+                      <Badge status={u.account_status} label={u.account_status.toUpperCase()} />
+                    </td>
+
+                    <td style={{ padding: 'var(--space-4)', textAlign: 'right' }}>
+                      <div style={{ display: 'inline-flex', gap: '6px', justifyContent: 'flex-end' }}>
+                        {u.account_status === 'pending' && (
+                          <>
+                            <Button size="sm" variant="primary" onClick={() => handleStatusChange(u.id, 'approved')}>
+                              Approve
+                            </Button>
+                            <Button size="sm" variant="danger" onClick={() => handleStatusChange(u.id, 'rejected')}>
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                        {u.account_status === 'approved' && (
+                          <Button size="sm" variant="outline" onClick={() => handleStatusChange(u.id, 'suspended')} style={{ color: 'var(--warning-main)', borderColor: 'var(--warning-border)' }}>
+                            Suspend
+                          </Button>
+                        )}
+                        {(u.account_status === 'suspended' || u.account_status === 'rejected') && (
+                          <Button size="sm" variant="primary" onClick={() => handleStatusChange(u.id, 'approved')}>
+                            Re-Approve
+                          </Button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+                {filteredUsers.length === 0 && (
+                  <tr>
+                    <td colSpan={6} style={{ padding: 'var(--space-8)', textAlign: 'center', color: 'var(--ink-muted)' }}>
+                      നിർദ്ദേശിച്ച വ്യവസ്ഥകൾക്കനുസരിച്ചുള്ള യൂസർമാർ ആരുമില്ല. (No users found)
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+    </AdminLayout>
   );
 };
+
