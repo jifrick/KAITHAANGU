@@ -162,8 +162,11 @@ const AppRoutes = () => {
   );
 };
 
+import { Footer } from './components/common/Footer';
+
 const Navigation = () => {
   const { user, profile, signOut } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const isContentAdmin = profile?.role === 'admin' && 
     (profile?.admin_role === 'super_admin' || profile?.admin_role === 'content_admin');
@@ -177,57 +180,88 @@ const Navigation = () => {
   const isSupportModerator = profile?.role === 'admin' && 
     (profile?.admin_role === 'super_admin' || profile?.admin_role === 'support_moderator' || profile?.admin_role === 'content_admin');
 
+  const navItems = (
+    <>
+      <Link to="/items" onClick={() => setMobileMenuOpen(false)}>Browse Items</Link>
+      <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
+      <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
+
+      {user ? (
+        <>
+          {profile?.role === 'admin' ? (
+            <Link to="/admin/dashboard" onClick={() => setMobileMenuOpen(false)}>Admin Panel</Link>
+          ) : (
+            <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link>
+          )}
+          {isContentAdmin && (
+            <Link to="/admin/moderation" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--danger)', fontWeight: 'bold' }}>
+              Moderation
+            </Link>
+          )}
+          {isVerificationAdmin && (
+            <>
+              <Link to="/admin/verification" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}>
+                Verification
+              </Link>
+              <Link to="/admin/accounts" onClick={() => setMobileMenuOpen(false)} style={{ color: '#8b5cf6', fontWeight: 'bold' }}>
+                Accounts
+              </Link>
+            </>
+          )}
+          {isMatchingAdmin && (
+            <Link to="/admin/matching" onClick={() => setMobileMenuOpen(false)} style={{ color: '#059669', fontWeight: 'bold' }}>
+              Matching
+            </Link>
+          )}
+          {isSupportModerator && (
+            <Link to="/admin/reports" onClick={() => setMobileMenuOpen(false)} style={{ color: '#d97706', fontWeight: 'bold' }}>
+              Reports
+            </Link>
+          )}
+          {profile?.role === 'donor' && (
+            <Link to="/create-item" onClick={() => setMobileMenuOpen(false)} className="btn btn-primary" style={{ padding: '0.4rem 1rem' }}>
+              Give Item
+            </Link>
+          )}
+          <button onClick={() => { setMobileMenuOpen(false); signOut(); }} className="btn btn-secondary" style={{ padding: '0.4rem 1rem' }}>
+            Sign Out
+          </button>
+        </>
+      ) : (
+        <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="btn btn-primary" style={{ padding: '0.4rem 1rem' }}>
+          Join to Give
+        </Link>
+      )}
+    </>
+  );
+
   return (
-    <nav className="navbar">
-      <Brand size="sm" clickable={true} />
-      <div className="nav-links">
-        <Link to="/items">Browse Items</Link>
-        {user ? (
-          <>
-            {profile?.role === 'admin' ? (
-              <Link to="/admin/dashboard">Admin Panel</Link>
-            ) : (
-              <Link to="/dashboard">Dashboard</Link>
-            )}
-            {isContentAdmin && (
-              <Link to="/admin/moderation" style={{ color: 'var(--danger)', fontWeight: 'bold' }}>
-                Moderation
-              </Link>
-            )}
-            {isVerificationAdmin && (
-              <>
-                <Link to="/admin/verification" style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}>
-                  Verification
-                </Link>
-                <Link to="/admin/accounts" style={{ color: '#8b5cf6', fontWeight: 'bold' }}>
-                  Accounts
-                </Link>
-              </>
-            )}
-            {isMatchingAdmin && (
-              <Link to="/admin/matching" style={{ color: '#059669', fontWeight: 'bold' }}>
-                Matching
-              </Link>
-            )}
-            {isSupportModerator && (
-              <Link to="/admin/reports" style={{ color: '#d97706', fontWeight: 'bold' }}>
-                Reports
-              </Link>
-            )}
-            {profile?.role === 'donor' && (
-              <Link to="/create-item" className="btn btn-primary" style={{ padding: '0.4rem 1rem' }}>
-                Give Item
-              </Link>
-            )}
-            <button onClick={signOut} className="btn btn-secondary" style={{ padding: '0.4rem 1rem' }}>
-              Sign Out
-            </button>
-          </>
-        ) : (
-          <Link to="/login" className="btn btn-primary" style={{ padding: '0.4rem 1rem' }}>Join to Give</Link>
-        )}
-      </div>
-    </nav>
+    <>
+      <nav className="navbar">
+        <Brand size="sm" clickable={true} />
+        
+        {/* Desktop Links */}
+        <div className="nav-links" style={{ display: window.innerWidth < 768 ? 'none' : 'flex' }}>
+          {navItems}
+        </div>
+
+        {/* Mobile Toggle */}
+        <button 
+          className="mobile-nav-toggle" 
+          aria-label="Toggle navigation menu"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? '✕' : '☰'}
+        </button>
+      </nav>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="mobile-nav-menu">
+          {navItems}
+        </div>
+      )}
+    </>
   );
 };
 
@@ -240,6 +274,7 @@ function App() {
           <main className="main-content">
             <AppRoutes />
           </main>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>
