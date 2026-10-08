@@ -96,17 +96,26 @@ export const BrandIllustration: React.FC<{
   style?: React.CSSProperties;
 }> = ({ width = '100%', className = '', style }) => {
   return (
-    <img 
-      src="/brand/kaithaangu-illustration.png" 
-      alt="KAITHAANGU Community Giving" 
+    <video 
+      autoPlay 
+      loop 
+      muted 
+      playsInline
+      aria-hidden="true"
       className={`brand-illustration ${className}`}
       style={{
         width: width,
         maxWidth: '540px',
         height: 'auto',
         objectFit: 'contain',
+        borderRadius: 'var(--radius-lg, 16px)',
+        mixBlendMode: 'multiply',
         ...style
       }}
-    />
+    >
+      <source src="/brand/kaithaangu-giving-animation.webm" type="video/webm" />
+      <source src="/brand/kaithaangu-giving-animation.mp4" type="video/mp4" />
+      Your browser does not support HTML5 video.
+    </video>
   );
 };
