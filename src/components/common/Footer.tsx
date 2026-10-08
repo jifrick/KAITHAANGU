@@ -30,8 +30,8 @@ export const Footer: React.FC = () => {
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', fontSize: 'var(--fs-body-sm)' }}>
             <Link to="/items" style={{ color: 'var(--ink-secondary)' }}>Browse Free Items</Link>
-            <a href="#how-it-works" style={{ color: 'var(--ink-secondary)' }}>How It Works</a>
-            <a href="#about" style={{ color: 'var(--ink-secondary)' }}>About KAITHAANGU</a>
+            <a href="/#how-it-works" style={{ color: 'var(--ink-secondary)' }}>How It Works</a>
+            <a href="/#about" style={{ color: 'var(--ink-secondary)' }}>About KAITHAANGU</a>
             <Link to={giveItemRoute} style={{ color: 'var(--primary-blue)', fontWeight: 600 }}>Give an Item</Link>
           </div>
         </div>

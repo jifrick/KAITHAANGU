@@ -183,8 +183,8 @@ const Navigation = () => {
   const navItems = (
     <>
       <Link to="/items" onClick={() => setMobileMenuOpen(false)}>Browse Items</Link>
-      <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-      <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
+      <a href="/#how-it-works" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
+      <a href="/#about" onClick={() => setMobileMenuOpen(false)}>About</a>
 
       {user ? (
         <>
