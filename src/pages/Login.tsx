@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ShieldCheck, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -104,7 +105,7 @@ export const Login: React.FC = () => {
               fontWeight: 600,
               fontFamily: 'var(--font-malayalam)'
             }}>
-              <span>🛡️</span>
+              <ShieldCheck size={16} strokeWidth={2} style={{ flexShrink: 0 }} />
               <span>നിങ്ങളുടെ വ്യക്തിഗത വിവരങ്ങൾ സുരക്ഷിതമായി കൈകാര്യം ചെയ്യുന്നു</span>
             </div>
           </div>
@@ -155,7 +156,7 @@ export const Login: React.FC = () => {
                 alignItems: 'flex-start',
                 gap: '8px'
               }}>
-                <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚠️</span>
+                <AlertTriangle size={16} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
                 <span style={{ flex: 1 }}>{error}</span>
               </div>
             )}

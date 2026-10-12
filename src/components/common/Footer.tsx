@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Brand } from './Brand';
 import { useAuth } from '../../context/AuthContext';
+import { Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const { user, profile } = useAuth();
@@ -50,7 +51,9 @@ export const Footer: React.FC = () => {
 
       <div className="footer-bottom">
         <span>© {currentYear} KAITHAANGU (കൈത്താങ്ങ്) — All Rights Reserved.</span>
-        <span>Made with ❤️ for the community.</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+          Made with <Heart size={13} fill="var(--secondary-rose)" stroke="none" /> for the community.
+        </span>
       </div>
     </footer>
   );

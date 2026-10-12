@@ -7,6 +7,7 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Input } from '../../components/ui/Input';
+import { ShieldAlert, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
 export const AdminLogin: React.FC = () => {
   const [adminIdInput, setAdminIdInput] = useState('');
@@ -104,8 +105,9 @@ export const AdminLogin: React.FC = () => {
               <Brand size="md" clickable={false} showTagline={false} />
             </div>
             
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-2)' }}>
-              <Badge status="rose" label="🛡️ Administration Portal" dot={false} />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', marginBottom: 'var(--space-2)' }}>
+              <ShieldAlert size={14} style={{ color: 'var(--rose-600)' }} />
+              <Badge status="rose" label="Administration Portal" dot={false} />
             </div>
 
             <h1 style={{
@@ -134,7 +136,7 @@ export const AdminLogin: React.FC = () => {
               alignItems: 'flex-start',
               gap: '8px'
             }}>
-              <span>⚠️</span>
+              <AlertTriangle size={16} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
               <span style={{ flex: 1 }}>{error}</span>
             </div>
           )}
@@ -195,12 +197,14 @@ export const AdminLogin: React.FC = () => {
                     border: 'none',
                     cursor: 'pointer',
                     padding: '6px 8px',
-                    fontSize: '1.1rem',
                     color: 'var(--ink-muted)',
-                    borderRadius: 'var(--radius-sm)'
+                    borderRadius: 'var(--radius-sm)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                  {showPassword ? <EyeOff size={16} strokeWidth={2} /> : <Eye size={16} strokeWidth={2} />}
                 </button>
               </div>
             </div>

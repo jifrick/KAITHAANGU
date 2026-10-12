@@ -8,24 +8,28 @@ import { Badge } from '../components/ui/Badge';
 import { Typography } from '../components/common/Typography';
 import { Textarea, Select } from '../components/ui/Input';
 import type { Item, ItemImage, Profile } from '../types/database';
+import { 
+  Gift, MapPin, Flag, Lock, PackageOpen, CheckCircle2, Clock,
+  BookOpen, Shirt, Armchair, Laptop, Gamepad2, Home, Stethoscope, Baby, Plug, Package 
+} from 'lucide-react';
 
 type ItemDetail = Item & { 
   item_images: ItemImage[];
   donor: Profile;
 };
 
-const getCategoryIcon = (catName: string) => {
+const renderCategoryIcon = (catName: string, size: number = 48) => {
   switch (catName) {
-    case 'Books & Education': return '📚';
-    case 'Clothes': return '👕';
-    case 'Furniture': return '🪑';
-    case 'Electronics': return '💻';
-    case 'Toys': return '🧸';
-    case 'Household Items': return '🏠';
-    case 'Medical Equipment': return '🩺';
-    case 'Baby & Kids': return '🍼';
-    case 'Appliances': return '🔌';
-    default: return '📦';
+    case 'Books & Education': return <BookOpen size={size} strokeWidth={1.5} />;
+    case 'Clothes': return <Shirt size={size} strokeWidth={1.5} />;
+    case 'Furniture': return <Armchair size={size} strokeWidth={1.5} />;
+    case 'Electronics': return <Laptop size={size} strokeWidth={1.5} />;
+    case 'Toys': return <Gamepad2 size={size} strokeWidth={1.5} />;
+    case 'Household Items': return <Home size={size} strokeWidth={1.5} />;
+    case 'Medical Equipment': return <Stethoscope size={size} strokeWidth={1.5} />;
+    case 'Baby & Kids': return <Baby size={size} strokeWidth={1.5} />;
+    case 'Appliances': return <Plug size={size} strokeWidth={1.5} />;
+    default: return <Package size={size} strokeWidth={1.5} />;
   }
 };
 
@@ -207,7 +211,7 @@ export const ItemView: React.FC = () => {
     return (
       <div className="page-container">
         <Card style={{ textAlign: 'center', padding: 'var(--space-12)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-3)' }}>🌱</div>
+          <PackageOpen size={56} strokeWidth={1.5} style={{ color: 'var(--primary-blue)', margin: '0 auto var(--space-3) auto', display: 'block' }} />
           <Typography malayalam style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--primary-blue)', marginBottom: 'var(--space-2)' }}>
             ഈ സാധനം കണ്ടെത്താനായില്ല.
           </Typography>
@@ -226,7 +230,6 @@ export const ItemView: React.FC = () => {
 
   const hasImages = item.item_images && item.item_images.length > 0;
   const currentImageUrl = hasImages ? getPublicUrl(item.item_images[selectedImageIndex]?.storage_path || item.item_images[0].storage_path) : null;
-  const catIcon = getCategoryIcon(item.category);
 
   return (
     <div className="page-container">
@@ -261,7 +264,7 @@ export const ItemView: React.FC = () => {
                   gap: 'var(--space-3)'
                 }}
               >
-                <span style={{ fontSize: '4rem' }}>{catIcon}</span>
+                {renderCategoryIcon(item.category, 54)}
                 <span style={{ fontSize: 'var(--fs-body-sm)', fontWeight: 700, letterSpacing: '0.05em' }}>
                   KAITHAANGU COMMUNITY GIVING
                 </span>
@@ -316,7 +319,7 @@ export const ItemView: React.FC = () => {
               alignItems: 'flex-start'
             }}
           >
-            <span style={{ fontSize: '1.25rem', flexShrink: 0 }}>🔒</span>
+            <Lock size={16} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--primary-blue)' }} />
             <Typography variant="body-sm" color="secondary" malayalam style={{ margin: 0 }}>
               സ്വകാര്യതയും സുരക്ഷയും മുൻനിർത്തി കൃത്യമായ വിലാസവും ഫോൺ നമ്പറും Match സ്ഥിരീകരിച്ച ശേഷം മാത്രം പങ്കിടും.
             </Typography>
@@ -341,10 +344,14 @@ export const ItemView: React.FC = () => {
                     borderRadius: 'var(--radius-pill)',
                     fontSize: 'var(--fs-caption)',
                     fontWeight: 700,
-                    border: '1px solid var(--soft-rose-border)'
+                    border: '1px solid var(--soft-rose-border)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
                   }}
                 >
-                  🎁 സൗജന്യമായി നൽകുന്നു (100% FREE)
+                  <Gift size={13} strokeWidth={2} style={{ flexShrink: 0 }} />
+                  <span>സൗജന്യമായി നൽകുന്നു (100% FREE)</span>
                 </span>
               </div>
 
@@ -357,10 +364,14 @@ export const ItemView: React.FC = () => {
                   cursor: 'pointer', 
                   textDecoration: 'underline', 
                   fontSize: 'var(--fs-caption)',
-                  fontWeight: 600
+                  fontWeight: 600,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px'
                 }}
               >
-                🚩 Report Item
+                <Flag size={13} strokeWidth={2} />
+                <span>Report Item</span>
               </button>
             </div>
 
@@ -385,8 +396,9 @@ export const ItemView: React.FC = () => {
               </span>
 
               {item.area && (
-                <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--ink-secondary)', fontWeight: 600 }}>
-                  📍 {item.area} (ഏകദേശ സ്ഥലം)
+                <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--ink-secondary)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <MapPin size={14} strokeWidth={2} />
+                  <span>{item.area} (ഏകദേശ സ്ഥലം)</span>
                 </span>
               )}
             </div>
@@ -423,8 +435,9 @@ export const ItemView: React.FC = () => {
 
             <div>
               <Typography variant="caption" color="muted" style={{ display: 'block', marginBottom: '2px' }}>APPROXIMATE LOCATION</Typography>
-              <Typography variant="body" style={{ fontWeight: 700, margin: 0 }}>
-                📍 {item.area || 'Kerala'}
+              <Typography variant="body" style={{ fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <MapPin size={14} strokeWidth={2} />
+                <span>{item.area || 'Kerala'}</span>
               </Typography>
             </div>
           </div>
@@ -474,7 +487,7 @@ export const ItemView: React.FC = () => {
             /* State 5: Already Requested */
             ) : hasRequested ? (
               <div style={{ textAlign: 'center', padding: 'var(--space-4)', backgroundColor: 'var(--success-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--success-border)' }}>
-                <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-2)' }}>✓</div>
+                <CheckCircle2 size={28} strokeWidth={2} style={{ color: 'var(--success-text)', margin: '0 auto var(--space-2) auto' }} />
                 <Typography malayalam style={{ color: 'var(--success-text)', fontWeight: 700, margin: 0 }}>
                   നിങ്ങൾ ഈ സാധനത്തിനായി അഭ്യർത്ഥന നൽകിയിട്ടുണ്ട്. അഡ്മിൻ റിവ്യൂവിന് ശേഷം നിങ്ങളെ അറിയിക്കും.
                 </Typography>
@@ -483,7 +496,7 @@ export const ItemView: React.FC = () => {
             /* State 6: Pending Verification Recipient */
             ) : !isRecipientApproved ? (
               <div style={{ textAlign: 'center', padding: 'var(--space-4)', backgroundColor: 'var(--warning-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--warning-border)' }}>
-                <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-2)' }}>⏳</div>
+                <Clock size={28} strokeWidth={2} style={{ color: 'var(--warning-text)', margin: '0 auto var(--space-2) auto' }} />
                 <Typography malayalam style={{ color: 'var(--warning-text)', fontWeight: 700, margin: 0 }}>
                   നിങ്ങളുടെ അക്കൗണ്ട് അഡ്മിൻ പരിശോധനയിലാണ്. വരിഫിക്കേഷൻ പൂർത്തിയായ ശേഷം അഭ്യർത്ഥിക്കാം.
                 </Typography>

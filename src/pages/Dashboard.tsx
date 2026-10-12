@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
+import { Gift, Search, ImageOff, AlertTriangle, Handshake, Phone } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
   const { profile, signOut } = useAuth();
@@ -155,9 +156,9 @@ export const Dashboard: React.FC = () => {
                 fontFamily: 'var(--font-malayalam)',
                 margin: 0
               }}>
-                നമസ്കാരം, {profile.name || 'അംഗമേ'} 👋
+                നമസ്കാരം, {profile.name || 'അംഗമേ'}
               </h1>
-              <Badge status="approved" label="✓ Approved User" />
+              <Badge status="approved" label="Approved User" />
             </div>
 
             <p style={{
@@ -212,16 +213,16 @@ export const Dashboard: React.FC = () => {
             <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
               {isDonor && (
                 <Link to="/create-item" style={{ textDecoration: 'none' }}>
-                  <Button variant="primary" size="md" style={{ fontFamily: 'var(--font-malayalam)' }}>
-                    🎁 ഒരു സാധനം നൽകൂ
+                  <Button variant="primary" size="md" style={{ fontFamily: 'var(--font-malayalam)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <Gift size={15} strokeWidth={2} /> ഒരു സാധനം നൽകൂ
                   </Button>
                 </Link>
               )}
 
               {isRecipient && (
                 <Link to="/items" style={{ textDecoration: 'none' }}>
-                  <Button variant={isDonor ? 'outline' : 'primary'} size="md" style={{ fontFamily: 'var(--font-malayalam)' }}>
-                    🔍 സാധനങ്ങൾ കണ്ടെത്തൂ
+                  <Button variant={isDonor ? 'outline' : 'primary'} size="md" style={{ fontFamily: 'var(--font-malayalam)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <Search size={15} strokeWidth={2} /> സാധനങ്ങൾ കണ്ടെത്തൂ
                   </Button>
                 </Link>
               )}
@@ -357,7 +358,10 @@ export const Dashboard: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-            <span>⚠️ {error}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <AlertTriangle size={16} strokeWidth={2} style={{ color: 'var(--danger)' }} />
+              <span>{error}</span>
+            </span>
             <Button size="sm" variant="outline" onClick={fetchDashboardData}>വീണ്ടും ശ്രമിക്കുക</Button>
           </div>
         )}
@@ -376,7 +380,7 @@ export const Dashboard: React.FC = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                 {matches.length === 0 ? (
                   <Card style={{ padding: 'var(--space-8)', textAlign: 'center', borderRadius: 'var(--radius-xl)' }}>
-                    <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>🤝</div>
+                    <Handshake size={44} strokeWidth={1.5} style={{ color: 'var(--primary-blue)', margin: '0 auto var(--space-2) auto', display: 'block' }} />
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-malayalam)', marginBottom: '4px' }}>
                       നിങ്ങൾക്ക് ഇതുവരെ Matches ഒന്നുമില്ല
                     </h3>
@@ -412,8 +416,9 @@ export const Dashboard: React.FC = () => {
                         border: '1px solid var(--soft-blue-border)',
                         marginTop: 'var(--space-4)'
                       }}>
-                        <div style={{ fontSize: 'var(--fs-label)', fontWeight: 700, color: 'var(--ink)', marginBottom: 'var(--space-2)', fontFamily: 'var(--font-malayalam)' }}>
-                          📞 കൈമാറ്റത്തിനുള്ള ബന്ധപ്പെടൽ വിവരങ്ങൾ:
+                        <div style={{ fontSize: 'var(--fs-label)', fontWeight: 700, color: 'var(--ink)', marginBottom: 'var(--space-2)', fontFamily: 'var(--font-malayalam)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Phone size={14} strokeWidth={2} style={{ color: 'var(--primary-blue)' }} />
+                          <span>കൈമാറ്റത്തിനുള്ള ബന്ധപ്പെടൽ വിവരങ്ങൾ:</span>
                         </div>
 
                         {profile.role === 'donor' || m.donor_id === profile.id ? (
@@ -467,7 +472,9 @@ export const Dashboard: React.FC = () => {
               <div>
                 {items.length === 0 ? (
                   <Card style={{ padding: 'var(--space-8)', textAlign: 'center', borderRadius: 'var(--radius-xl)' }}>
-                    <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>🎁</div>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-2)' }}>
+                      <Gift size={40} strokeWidth={1.4} style={{ color: 'var(--ink-muted)' }} />
+                    </div>
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-malayalam)', marginBottom: '4px' }}>
                       നിങ്ങൾ ഇതുവരെ ഒരു സാധനവും നൽകിയിട്ടില്ല
                     </h3>
@@ -490,8 +497,9 @@ export const Dashboard: React.FC = () => {
                             {imgUrl ? (
                               <img src={imgUrl} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             ) : (
-                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink-muted)' }}>
-                                📷 No Image
+                              <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--ink-muted)' }}>
+                                <ImageOff size={22} strokeWidth={1.6} />
+                                <span style={{ fontSize: 'var(--fs-caption)' }}>No Image</span>
                               </div>
                             )}
                             <div style={{ position: 'absolute', top: '8px', right: '8px' }}>
@@ -524,7 +532,7 @@ export const Dashboard: React.FC = () => {
               <div>
                 {requests.length === 0 ? (
                   <Card style={{ padding: 'var(--space-8)', textAlign: 'center', borderRadius: 'var(--radius-xl)' }}>
-                    <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>🔍</div>
+                    <Search size={40} strokeWidth={1.5} style={{ color: 'var(--ink-muted)', margin: '0 auto var(--space-2) auto', display: 'block' }} />
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-malayalam)', marginBottom: '4px' }}>
                       നിങ്ങൾ ഇതുവരെ ഒരു സാധനവും അഭ്യർത്ഥിച്ചിട്ടില്ല
                     </h3>
@@ -547,8 +555,9 @@ export const Dashboard: React.FC = () => {
                             {imgUrl ? (
                               <img src={imgUrl} alt={req.item?.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             ) : (
-                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink-muted)' }}>
-                                📷 No Image
+                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink-muted)', gap: '6px', fontSize: 'var(--fs-caption)' }}>
+                                <ImageOff size={16} strokeWidth={2} />
+                                <span>No Image</span>
                               </div>
                             )}
                             <div style={{ position: 'absolute', top: '8px', right: '8px' }}>

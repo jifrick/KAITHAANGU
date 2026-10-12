@@ -9,6 +9,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input, Textarea, Checkbox } from '../components/ui/Input';
 import { Badge } from '../components/ui/Badge';
+import { Lock, Gift, ShieldCheck, Camera, AlertTriangle, Sparkles, X } from 'lucide-react';
 
 const CATEGORIES = [
   'Books & Education', 'Clothes', 'Furniture', 'Electronics', 
@@ -209,7 +210,7 @@ export const CreateItem: React.FC = () => {
             fontFamily: 'var(--font-malayalam)',
             marginBottom: 'var(--space-2)'
           }}>
-            ഒരു സാധനം നൽകൂ. 💙
+            ഒരു സാധനം നൽകൂ
           </h1>
 
           <p style={{
@@ -222,7 +223,10 @@ export const CreateItem: React.FC = () => {
             നിങ്ങൾക്ക് ഇനി ആവശ്യമില്ലാത്ത ഒരു നല്ല വസ്തു, അത് ആവശ്യമുള്ള മറ്റൊരാളുടെ കൈകളിലെത്തട്ടെ.
           </p>
 
-          <Badge status="info" label="✨ കൈത്താങ്ങിൽ എല്ലാ സാധനങ്ങളും സൗജന്യമായാണ് നൽകുന്നത്" dot={false} />
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Sparkles size={14} style={{ color: 'var(--primary-blue)' }} />
+            <Badge status="info" label="കൈത്താങ്ങിൽ എല്ലാ സാധനങ്ങളും സൗജന്യമായാണ് നൽകുന്നത്" dot={false} />
+          </span>
         </div>
 
         <div style={{
@@ -257,7 +261,7 @@ export const CreateItem: React.FC = () => {
                   alignItems: 'flex-start',
                   gap: '8px'
                 }}>
-                  <span style={{ fontSize: '1rem' }}>⚠️</span>
+                  <AlertTriangle size={16} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
                   <span style={{ flex: 1 }}>{error}</span>
                 </div>
               )}
@@ -382,7 +386,7 @@ export const CreateItem: React.FC = () => {
                       value={description}
                       onChange={e => setDescription(e.target.value)}
                       placeholder="സാധനത്തിന്റെ ഉപയോഗം, വലിപ്പം, പ്രത്യേകതകൾ എന്നിവ വിവരിക്കുക. (കുറഞ്ഞത് 20 അക്ഷരങ്ങൾ)..."
-                      helperText="🔒 വിവരണം മാത്രമായിരിക്കും പൊതുവായി കാണുക. ഫോൺ നമ്പർ, ഇമെയിൽ, വില എന്നിവ ചേർക്കരുത്."
+                      helperText="വിവരണം മാത്രമായിരിക്കും പൊതുവായി കാണുക. ഫോൺ നമ്പർ, ഇമെയിൽ, വില എന്നിവ ചേർക്കരുത്."
                       style={{ fontFamily: 'var(--font-malayalam)' }}
                     />
                   </div>
@@ -427,7 +431,7 @@ export const CreateItem: React.FC = () => {
                         cursor: images.length >= 5 ? 'not-allowed' : 'pointer'
                       }}
                     />
-                    <div style={{ fontSize: '2rem', marginBottom: '4px' }}>📷</div>
+                    <Camera size={36} strokeWidth={1.5} style={{ color: 'var(--primary-blue)', margin: '0 auto 6px auto', display: 'block' }} />
                     <div style={{ fontWeight: 700, color: 'var(--primary-blue)', fontFamily: 'var(--font-malayalam)' }}>
                       {images.length >= 5 ? 'പരമാവധി 5 ഫോട്ടോകൾ ചേർത്തു' : 'ഫോട്ടോകൾ തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ ഇങ്ങോട്ട് വലിച്ചിടുക'}
                     </div>
@@ -437,8 +441,9 @@ export const CreateItem: React.FC = () => {
                   </div>
 
                   {isProcessing && (
-                    <div style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--primary-blue)', fontFamily: 'var(--font-malayalam)' }}>
-                      ⚡ ഫോട്ടോകൾ ഒപ്റ്റിമൈസ് ചെയ്യുന്നു...
+                    <div style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--primary-blue)', fontFamily: 'var(--font-malayalam)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Sparkles size={14} style={{ color: 'var(--primary-blue)' }} />
+                      <span>ഫോട്ടോകൾ ഒപ്റ്റിമൈസ് ചെയ്യുന്നു...</span>
                     </div>
                   )}
 
@@ -476,11 +481,10 @@ export const CreateItem: React.FC = () => {
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '0.75rem'
+                              justifyContent: 'center'
                             }}
                           >
-                            ✕
+                            <X size={12} strokeWidth={2.5} />
                           </button>
                         </div>
                       ))}
@@ -510,7 +514,7 @@ export const CreateItem: React.FC = () => {
                     value={area}
                     onChange={e => setArea(e.target.value)}
                     placeholder="ഉദാ. Kozhikode, Ernakulam, Kaloor..."
-                    helperText="🔒 ഏകദേശ പ്രദേശം മാത്രം നൽകുക. വീട്ടുപേരോ കൃത്യമായ വിലാസമോ നൽകരുത്."
+                    helperText="ഏകദേശ പ്രദേശം മാത്രം നൽകുക. വീട്ടുപേരോ കൃത്യമായ വിലാസമോ നൽകരുത്."
                     style={{ fontFamily: 'var(--font-malayalam)' }}
                   />
                 </div>
@@ -619,9 +623,13 @@ export const CreateItem: React.FC = () => {
                 fontWeight: 700,
                 color: 'var(--ink)',
                 fontFamily: 'var(--font-malayalam)',
-                marginBottom: 'var(--space-3)'
+                marginBottom: 'var(--space-3)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
               }}>
-                💙 കൈത്താങ്ങ് കമ്മ്യൂണിറ്റി നയം
+                <ShieldCheck size={18} strokeWidth={2} style={{ color: 'var(--primary-blue)' }} />
+                <span>കൈത്താങ്ങ് കമ്മ്യൂണിറ്റി നയം</span>
               </div>
 
               <div style={{
@@ -633,14 +641,17 @@ export const CreateItem: React.FC = () => {
                 fontFamily: 'var(--font-malayalam)',
                 lineHeight: 1.5
               }}>
-                <div>
-                  <strong>🔒 സ്വകാര്യത:</strong> നിങ്ങളുടെ ഫോൺ നമ്പറോ വീട്ടുവിലാസമോ പൊതുവായി കാണിക്കില്ല.
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <Lock size={13} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>സ്വകാര്യത:</strong> നിങ്ങളുടെ ഫോൺ നമ്പറോ വീട്ടുവിലാസമോ പൊതുവായി കാണിക്കില്ല.</span>
                 </div>
-                <div>
-                  <strong>🎁 സൗജന്യം:</strong> കൈത്താങ്ങിലെ എല്ലാ കൈമാറ്റങ്ങളും 100% സൗജന്യമാണ്.
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <Gift size={13} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>സൗജന്യം:</strong> കൈത്താങ്ങിലെ എല്ലാ കൈമാറ്റങ്ങളും 100% സൗജന്യമാണ്.</span>
                 </div>
-                <div>
-                  <strong>🛡️ വെരിഫിക്കേഷൻ:</strong> ഓരോ ലിസ്റ്റിംഗും കൈത്താങ്ങ് അഡ്മിൻമാർ അവലോകനം ചെയ്ത ശേഷമാണ് പ്രസിദ്ധീകരിക്കുന്നത്.
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <ShieldCheck size={13} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>വെരിഫിക്കേഷൻ:</strong> ഓരോ ലിസ്റ്റിംഗും കൈത്താങ്ങ് അഡ്മിൻമാർ അവലോകനം ചെയ്ത ശേഷമാണ് പ്രസിദ്ധീകരിക്കുന്നത്.</span>
                 </div>
               </div>
             </Card>

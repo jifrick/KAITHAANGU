@@ -6,6 +6,7 @@ import { AdminLayout } from '../../components/common/AdminLayout';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { RefreshCw, Bell, CheckCircle2, Users, Handshake, Gift, Sparkles, Flag, ClipboardList } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
   const { profile } = useAuth();
@@ -68,8 +69,9 @@ export const AdminDashboard: React.FC = () => {
       title="Admin Control Hub"
       subtitle="KAITHAANGU പ്ലാറ്റ്‌ഫോമിന്റെ അവലോകനവും അഡ്മിൻ മോഡറേഷൻ മൊഡ്യൂളുകളും."
       actions={
-        <Button size="sm" variant="outline" onClick={fetchMetrics} disabled={loading}>
-          🔄 Refresh Data
+        <Button size="sm" variant="outline" onClick={fetchMetrics} disabled={loading} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+          <span>Refresh Data</span>
         </Button>
       }
     >
@@ -97,7 +99,9 @@ export const AdminDashboard: React.FC = () => {
         gap: 'var(--space-3)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '1.4rem' }}>{totalPendingAttention > 0 ? '🔔' : '✅'}</span>
+          <span style={{ display: 'flex', alignItems: 'center', color: totalPendingAttention > 0 ? 'var(--primary-blue)' : 'var(--success-text)' }}>
+            {totalPendingAttention > 0 ? <Bell size={20} strokeWidth={2} /> : <CheckCircle2 size={20} strokeWidth={2} />}
+          </span>
           <div>
             <div style={{ fontWeight: 700, color: 'var(--ink)', fontSize: '1rem' }}>
               {totalPendingAttention > 0 
@@ -127,7 +131,10 @@ export const AdminDashboard: React.FC = () => {
           <Link to="/admin/accounts" style={{ textDecoration: 'none' }}>
             <Card interactive style={{ borderTop: '4px solid #8b5cf6', height: '100%', borderRadius: 'var(--radius-lg)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>👥 User Account Approvals</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Users size={18} strokeWidth={2} />
+                  <span>User Account Approvals</span>
+                </h3>
                 {counts.pendingAccounts > 0 ? (
                   <Badge status="pending" label={`${counts.pendingAccounts} Pending`} />
                 ) : (
@@ -146,7 +153,10 @@ export const AdminDashboard: React.FC = () => {
           <Link to="/admin/verification" style={{ textDecoration: 'none' }}>
             <Card interactive style={{ borderTop: '4px solid var(--primary-blue)', height: '100%', borderRadius: 'var(--radius-lg)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>🤝 Recipient Verification</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Handshake size={18} strokeWidth={2} />
+                  <span>Recipient Verification</span>
+                </h3>
                 {counts.pendingVerifications > 0 ? (
                   <Badge status="pending" label={`${counts.pendingVerifications} Pending`} />
                 ) : (
@@ -165,7 +175,10 @@ export const AdminDashboard: React.FC = () => {
           <Link to="/admin/moderation" style={{ textDecoration: 'none' }}>
             <Card interactive style={{ borderTop: '4px solid var(--danger)', height: '100%', borderRadius: 'var(--radius-lg)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>🎁 Item Moderation</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Gift size={18} strokeWidth={2} />
+                  <span>Item Moderation</span>
+                </h3>
                 {counts.pendingItems > 0 ? (
                   <Badge status="pending" label={`${counts.pendingItems} Pending`} />
                 ) : (
@@ -184,7 +197,10 @@ export const AdminDashboard: React.FC = () => {
           <Link to="/admin/matching" style={{ textDecoration: 'none' }}>
             <Card interactive style={{ borderTop: '4px solid #059669', height: '100%', borderRadius: 'var(--radius-lg)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>⚡ Requests & Matching</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Sparkles size={18} strokeWidth={2} />
+                  <span>Requests & Matching</span>
+                </h3>
                 <Badge status="info" label={`${counts.activeMatches} Active`} />
               </div>
               <p style={{ color: 'var(--ink-secondary)', fontSize: 'var(--fs-body-sm)', margin: 0, lineHeight: 1.5 }}>
@@ -199,7 +215,10 @@ export const AdminDashboard: React.FC = () => {
           <Link to="/admin/reports" style={{ textDecoration: 'none' }}>
             <Card interactive style={{ borderTop: '4px solid #d97706', height: '100%', borderRadius: 'var(--radius-lg)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>🚩 Reports & Support</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Flag size={18} strokeWidth={2} />
+                  <span>Reports & Support</span>
+                </h3>
                 {counts.openReports > 0 ? (
                   <Badge status="rejected" label={`${counts.openReports} Open`} />
                 ) : (
@@ -218,7 +237,10 @@ export const AdminDashboard: React.FC = () => {
           <Link to="/admin/audit" style={{ textDecoration: 'none' }}>
             <Card interactive style={{ borderTop: '4px solid #475569', height: '100%', borderRadius: 'var(--radius-lg)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>📋 Audit Logs</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ClipboardList size={18} strokeWidth={2} />
+                  <span>Audit Logs</span>
+                </h3>
                 <Badge status="info" label="Super Admin" />
               </div>
               <p style={{ color: 'var(--ink-secondary)', fontSize: 'var(--fs-body-sm)', margin: 0, lineHeight: 1.5 }}>

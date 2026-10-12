@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Input, Select } from '../../components/ui/Input';
 import type { Profile, AccountStatus } from '../../types/database';
+import { RefreshCw, AlertTriangle, Phone, MapPin } from 'lucide-react';
 
 export const AccountApprovals: React.FC = () => {
   const { profile } = useAuth();
@@ -86,15 +87,17 @@ export const AccountApprovals: React.FC = () => {
       title="User Account Approvals"
       subtitle="കൈത്താങ് പ്ലാറ്റ്‌ഫോമിൽ പുതിയതായി രജിസ്റ്റർ ചെയ്ത യൂസർമാരുടെ പ്രൊഫൈലുകളും അവസ്ഥകളും അവലോകനം ചെയ്യുക."
       actions={
-        <Button size="sm" variant="outline" onClick={loadUsers} disabled={loading}>
-          🔄 Refresh
+        <Button size="sm" variant="outline" onClick={loadUsers} disabled={loading} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+          <span>Refresh</span>
         </Button>
       }
     >
       {/* Error Banner */}
       {error && (
-        <Card style={{ background: 'var(--error-bg)', border: '1px solid var(--error-border)', color: 'var(--error-text)', marginBottom: 'var(--space-5)' }}>
-          ⚠️ {error}
+        <Card style={{ background: 'var(--error-bg)', border: '1px solid var(--error-border)', color: 'var(--error-text)', marginBottom: 'var(--space-5)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <AlertTriangle size={16} strokeWidth={2} style={{ flexShrink: 0 }} />
+          <span>{error}</span>
         </Card>
       )}
 
@@ -195,9 +198,13 @@ export const AccountApprovals: React.FC = () => {
                     </td>
 
                     <td style={{ padding: 'var(--space-4)', color: 'var(--ink-secondary)' }}>
-                      <div>📞 {u.phone || 'N/A'}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', marginTop: '2px', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        📍 {u.address || 'Location not specified'}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Phone size={12} strokeWidth={2} style={{ color: 'var(--ink-muted)' }} />
+                        <span>{u.phone || 'N/A'}</span>
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', marginTop: '2px', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        <MapPin size={11} strokeWidth={2} style={{ flexShrink: 0 }} />
+                        <span>{u.address || 'Location not specified'}</span>
                       </div>
                     </td>
 

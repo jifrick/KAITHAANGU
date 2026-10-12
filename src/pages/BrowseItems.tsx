@@ -8,6 +8,10 @@ import { Typography } from '../components/common/Typography';
 import { Input } from '../components/ui/Input';
 import { useAuth } from '../context/AuthContext';
 import type { Item, ItemImage } from '../types/database';
+import { 
+  Gift, Search, SlidersHorizontal, X, AlertTriangle, PackageOpen, MapPin,
+  BookOpen, Shirt, Armchair, Laptop, Gamepad2, Home, Stethoscope, Baby, Plug, Package
+} from 'lucide-react';
 
 type ItemWithImages = Item & { item_images: ItemImage[] };
 
@@ -33,18 +37,18 @@ const CONDITIONS = [
   'Usable'
 ];
 
-const getCategoryIcon = (catName: string) => {
+const renderCategoryIcon = (catName: string, size: number = 36) => {
   switch (catName) {
-    case 'Books & Education': return '📚';
-    case 'Clothes': return '👕';
-    case 'Furniture': return '🪑';
-    case 'Electronics': return '💻';
-    case 'Toys': return '🧸';
-    case 'Household Items': return '🏠';
-    case 'Medical Equipment': return '🩺';
-    case 'Baby & Kids': return '🍼';
-    case 'Appliances': return '🔌';
-    default: return '📦';
+    case 'Books & Education': return <BookOpen size={size} strokeWidth={1.75} />;
+    case 'Clothes': return <Shirt size={size} strokeWidth={1.75} />;
+    case 'Furniture': return <Armchair size={size} strokeWidth={1.75} />;
+    case 'Electronics': return <Laptop size={size} strokeWidth={1.75} />;
+    case 'Toys': return <Gamepad2 size={size} strokeWidth={1.75} />;
+    case 'Household Items': return <Home size={size} strokeWidth={1.75} />;
+    case 'Medical Equipment': return <Stethoscope size={size} strokeWidth={1.75} />;
+    case 'Baby & Kids': return <Baby size={size} strokeWidth={1.75} />;
+    case 'Appliances': return <Plug size={size} strokeWidth={1.75} />;
+    default: return <Package size={size} strokeWidth={1.75} />;
   }
 };
 
@@ -168,7 +172,7 @@ export const BrowseItems: React.FC = () => {
             marginBottom: 'var(--space-3)'
           }}
         >
-          🎁 എല്ലാം സൗജന്യം · കമ്മ്യൂണിറ്റിയിൽ നിന്ന് കമ്മ്യൂണിറ്റിയിലേക്ക്
+          <Gift size={13} strokeWidth={2} style={{ flexShrink: 0 }} /> എല്ലാം സൗജന്യം · കമ്മ്യൂണിറ്റിയിൽ നിന്ന് കമ്മ്യൂണിറ്റിയിലേക്ക്
         </span>
 
         <Typography as="h1" malayalam style={{ fontSize: 'var(--fs-h1)', color: 'var(--primary-blue)', marginBottom: 'var(--space-2)' }}>
@@ -189,7 +193,7 @@ export const BrowseItems: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="സാധനം തിരയൂ... (ഉദാ: Books, Chair, Toys, Laptop)"
-              icon={<span>🔍</span>}
+              icon={<Search size={16} strokeWidth={2} />}
               style={{ marginBottom: 0 }}
             />
           </div>
@@ -199,7 +203,7 @@ export const BrowseItems: React.FC = () => {
               variant="outline"
               size="md"
               onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-              icon={<span>⚙️</span>}
+              icon={<SlidersHorizontal size={16} strokeWidth={2} />}
             >
               Filter {hasActiveFilters && '•'}
             </Button>
@@ -248,9 +252,10 @@ export const BrowseItems: React.FC = () => {
               variant="ghost" 
               size="sm" 
               onClick={clearAllFilters}
-              style={{ color: 'var(--secondary-rose)', fontWeight: 600 }}
+              style={{ color: 'var(--secondary-rose)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
             >
-              Clear Filters ✕
+              <span>Clear Filters</span>
+              <X size={13} strokeWidth={2.5} />
             </Button>
           )}
         </div>
@@ -337,28 +342,28 @@ export const BrowseItems: React.FC = () => {
           {searchQuery.trim() !== '' && (
             <span className="chip">
               Search: "{searchQuery}"
-              <span className="chip-remove" onClick={() => setSearchQuery('')}>✕</span>
+              <span className="chip-remove" onClick={() => setSearchQuery('')}><X size={11} strokeWidth={2.5} /></span>
             </span>
           )}
 
           {category !== 'All' && (
             <span className="chip">
               Category: {category}
-              <span className="chip-remove" onClick={() => setCategory('All')}>✕</span>
+              <span className="chip-remove" onClick={() => setCategory('All')}><X size={11} strokeWidth={2.5} /></span>
             </span>
           )}
 
           {condition !== 'All' && (
             <span className="chip">
               Condition: {condition}
-              <span className="chip-remove" onClick={() => setCondition('All')}>✕</span>
+              <span className="chip-remove" onClick={() => setCondition('All')}><X size={11} strokeWidth={2.5} /></span>
             </span>
           )}
 
           {selectedArea !== 'All' && (
             <span className="chip">
               Area: {selectedArea}
-              <span className="chip-remove" onClick={() => setSelectedArea('All')}>✕</span>
+              <span className="chip-remove" onClick={() => setSelectedArea('All')}><X size={11} strokeWidth={2.5} /></span>
             </span>
           )}
 
@@ -382,7 +387,7 @@ export const BrowseItems: React.FC = () => {
       {/* 4. ITEM GRID & STATES */}
       {error ? (
         <Card style={{ textAlign: 'center', padding: 'var(--space-10)' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-3)' }}>⚠️</div>
+          <AlertTriangle size={36} strokeWidth={1.75} style={{ color: 'var(--danger)', margin: '0 auto var(--space-3) auto', display: 'block' }} />
           <Typography malayalam style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--error-text)', marginBottom: 'var(--space-2)' }}>
             {error}
           </Typography>
@@ -406,7 +411,7 @@ export const BrowseItems: React.FC = () => {
         </div>
       ) : allItems.length === 0 ? (
         <Card style={{ textAlign: 'center', padding: 'var(--space-12)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-3)' }}>🌱</div>
+          <PackageOpen size={48} strokeWidth={1.5} style={{ color: 'var(--primary-blue)', margin: '0 auto var(--space-3) auto', display: 'block' }} />
           <Typography malayalam style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--primary-blue)', marginBottom: 'var(--space-2)' }}>
             ഇപ്പോൾ ഇവിടെ സാധനങ്ങളൊന്നുമില്ല.
           </Typography>
@@ -421,7 +426,7 @@ export const BrowseItems: React.FC = () => {
         </Card>
       ) : filteredItems.length === 0 ? (
         <Card style={{ textAlign: 'center', padding: 'var(--space-10)' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-3)' }}>🔍</div>
+          <Search size={36} strokeWidth={1.75} style={{ color: 'var(--ink-muted)', margin: '0 auto var(--space-3) auto', display: 'block' }} />
           <Typography malayalam style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 'var(--space-2)' }}>
             ഈ തിരഞ്ഞെടുപ്പിൽ സാധനങ്ങളൊന്നും കണ്ടെത്താനായില്ല.
           </Typography>
@@ -437,7 +442,6 @@ export const BrowseItems: React.FC = () => {
           {filteredItems.map(item => {
             const hasImage = item.item_images && item.item_images.length > 0;
             const imageUrl = hasImage ? getPublicUrl(item.item_images[0].storage_path) : null;
-            const catIcon = getCategoryIcon(item.category);
 
             return (
               <Link key={item.id} to={`/item/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -457,7 +461,7 @@ export const BrowseItems: React.FC = () => {
                         gap: '8px'
                       }}
                     >
-                      <span style={{ fontSize: '2.5rem' }}>{catIcon}</span>
+                      {renderCategoryIcon(item.category, 36)}
                       <span style={{ fontSize: 'var(--fs-caption)', fontWeight: 700, letterSpacing: '0.05em' }}>
                         KAITHAANGU
                       </span>
@@ -490,7 +494,8 @@ export const BrowseItems: React.FC = () => {
 
                     {item.area && (
                       <Typography variant="body-sm" color="muted" style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: 'var(--space-2)' }}>
-                        📍 {item.area}
+                        <MapPin size={13} strokeWidth={2} style={{ flexShrink: 0 }} />
+                        <span>{item.area}</span>
                       </Typography>
                     )}
 

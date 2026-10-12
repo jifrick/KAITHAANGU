@@ -4,6 +4,9 @@ import { Navigate, Link, useLocation } from 'react-router-dom';
 import { Brand } from './Brand';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
+import {
+  LayoutDashboard, Users, BadgeCheck, Gift, Zap, Flag, ClipboardList, Menu, X
+} from 'lucide-react';
 
 export interface AdminLayoutProps {
   children: React.ReactNode;
@@ -64,13 +67,13 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   };
 
   const navLinks = [
-    { label: '📊 Dashboard', path: '/admin/dashboard', show: true },
-    { label: '👥 Account Approvals', path: '/admin/accounts', show: isVerificationAdmin },
-    { label: '🤝 Recipient Verification', path: '/admin/verification', show: isVerificationAdmin },
-    { label: '🎁 Item Moderation', path: '/admin/moderation', show: isContentAdmin },
-    { label: '⚡ Requests & Matching', path: '/admin/matching', show: isMatchingAdmin },
-    { label: '🚩 Reports', path: '/admin/reports', show: isSupportModerator },
-    { label: '📋 Audit Logs', path: '/admin/audit', show: isSuperAdmin }
+    { label: 'Dashboard', icon: <LayoutDashboard size={15} strokeWidth={1.8} />, path: '/admin/dashboard', show: true },
+    { label: 'Account Approvals', icon: <Users size={15} strokeWidth={1.8} />, path: '/admin/accounts', show: isVerificationAdmin },
+    { label: 'Recipient Verification', icon: <BadgeCheck size={15} strokeWidth={1.8} />, path: '/admin/verification', show: isVerificationAdmin },
+    { label: 'Item Moderation', icon: <Gift size={15} strokeWidth={1.8} />, path: '/admin/moderation', show: isContentAdmin },
+    { label: 'Requests & Matching', icon: <Zap size={15} strokeWidth={1.8} />, path: '/admin/matching', show: isMatchingAdmin },
+    { label: 'Reports', icon: <Flag size={15} strokeWidth={1.8} />, path: '/admin/reports', show: isSupportModerator },
+    { label: 'Audit Logs', icon: <ClipboardList size={15} strokeWidth={1.8} />, path: '/admin/audit', show: isSuperAdmin }
   ];
 
   return (
@@ -95,7 +98,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
           <Brand size="sm" clickable={false} showTagline={false} />
-          <Badge status="rose" label={`🛡️ ${formatRoleTitle(role)}`} dot={false} />
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <Badge status="rose" label={formatRoleTitle(role)} dot={false} />
+          </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
@@ -113,7 +118,17 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               cursor: 'pointer'
             }}
           >
-            {mobileDrawerOpen ? '✕' : '☰ Menu'}
+            {mobileDrawerOpen ? (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <X size={16} strokeWidth={2} />
+                <span>Close</span>
+              </span>
+            ) : (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <Menu size={16} strokeWidth={2} />
+                <span>Menu</span>
+              </span>
+            )}
           </button>
 
           <Button variant="ghost" size="sm" onClick={signOut} style={{ color: 'var(--ink-muted)' }}>
@@ -162,7 +177,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                   to={n.path}
                   onClick={() => setMobileDrawerOpen(false)}
                   style={{
-                    display: 'block',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
                     padding: 'var(--space-3) var(--space-4)',
                     borderRadius: 'var(--radius-md)',
                     background: isActive ? 'var(--soft-blue)' : 'transparent',
@@ -173,6 +190,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                     transition: 'var(--transition-fast)'
                   }}
                 >
+                  <span style={{ opacity: isActive ? 1 : 0.5, flexShrink: 0 }}>{n.icon}</span>
                   {n.label}
                 </Link>
               );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ShieldCheck, AlertTriangle, Gift, HeartHandshake, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -141,7 +142,7 @@ export const CompleteProfile: React.FC = () => {
             fontFamily: 'var(--font-malayalam)',
             marginBottom: 'var(--space-2)'
           }}>
-            കൈത്താങ്ങിലേക്ക് സ്വാഗതം. 💙
+            കൈത്താങ്ങിലേക്ക് സ്വാഗതം
           </h1>
 
           <p style={{
@@ -262,7 +263,7 @@ export const CompleteProfile: React.FC = () => {
               alignItems: 'flex-start',
               gap: '8px'
             }}>
-              <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚠️</span>
+              <AlertTriangle size={16} strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
               <span style={{ flex: 1 }}>{error}</span>
             </div>
           )}
@@ -292,7 +293,7 @@ export const CompleteProfile: React.FC = () => {
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 placeholder="+91 9876543210"
-                helperText="🔒 ഈ നമ്പർ പൊതുവായി പ്രദർശിപ്പിക്കില്ല."
+                helperText="ഈ നമ്പർ പൊതുവായി പ്രദർശിപ്പിക്കില്ല."
                 style={{ fontFamily: 'var(--font-malayalam)' }}
               />
             </div>
@@ -306,7 +307,7 @@ export const CompleteProfile: React.FC = () => {
                 value={address}
                 onChange={e => setAddress(e.target.value)}
                 placeholder="നിങ്ങളുടെ യഥാർത്ഥ വിലാസം നൽകുക."
-                helperText="🔒 നിങ്ങളുടെ യഥാർത്ഥ വിലാസം സ്വകാര്യമായിരിക്കും. പൊതുവായി പ്രദർശിപ്പിക്കില്ല."
+                helperText="നിങ്ങളുടെ യഥാർത്ഥ വിലാസം സ്വകാര്യമായിരിക്കും. പൊതുവായി പ്രദർശിപ്പിക്കില്ല."
                 style={{ fontFamily: 'var(--font-malayalam)' }}
               />
             </div>
@@ -345,7 +346,10 @@ export const CompleteProfile: React.FC = () => {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Badge status="info" label="🎁 Donor" dot={false} />
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Gift size={13} strokeWidth={2} style={{ color: 'var(--primary-blue)' }} />
+                      <Badge status="info" label="Donor" dot={false} />
+                    </div>
                     <input
                       type="radio"
                       name="intent"
@@ -378,7 +382,10 @@ export const CompleteProfile: React.FC = () => {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Badge status="rose" label="🤝 Recipient" dot={false} />
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <HeartHandshake size={13} strokeWidth={2} style={{ color: 'var(--rose-600)' }} />
+                      <Badge status="rose" label="Recipient" dot={false} />
+                    </div>
                     <input
                       type="radio"
                       name="intent"
@@ -411,7 +418,10 @@ export const CompleteProfile: React.FC = () => {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Badge status="info" label="✨ Both" dot={false} />
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Sparkles size={13} strokeWidth={2} style={{ color: 'var(--primary-blue)' }} />
+                      <Badge status="info" label="Both" dot={false} />
+                    </div>
                     <input
                       type="radio"
                       name="intent"
@@ -451,7 +461,7 @@ export const CompleteProfile: React.FC = () => {
                     color: 'var(--ink)',
                     fontFamily: 'var(--font-malayalam)'
                   }}>
-                    <span>🛡️</span>
+                    <ShieldCheck size={18} strokeWidth={2} style={{ flexShrink: 0, color: 'var(--primary-blue)' }} />
                     <span>അധിക വെരിഫിക്കേഷൻ വിവരങ്ങൾ (Verification Details)</span>
                   </div>
                   <p style={{

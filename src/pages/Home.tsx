@@ -8,6 +8,11 @@ import { Badge } from '../components/ui/Badge';
 import { Typography } from '../components/common/Typography';
 import { BrandIllustration } from '../components/common/Brand';
 import type { Item, ItemImage } from '../types/database';
+import {
+  Gift, Sprout, ShieldCheck, Handshake, Home as HomeIcon,
+  BookOpen, Shirt, Armchair, Laptop, Puzzle, LampDesk,
+  Stethoscope, Baby, Zap, Package, MapPin, PackageOpen
+} from 'lucide-react';
 
 type ItemWithImages = Item & { item_images: ItemImage[] };
 
@@ -53,16 +58,16 @@ export const Home: React.FC = () => {
   };
 
   const categories = [
-    { name: 'Books & Education', icon: '📚' },
-    { name: 'Clothes', icon: '👕' },
-    { name: 'Furniture', icon: '🪑' },
-    { name: 'Electronics', icon: '💻' },
-    { name: 'Toys', icon: '🧸' },
-    { name: 'Household Items', icon: '🏠' },
-    { name: 'Medical Equipment', icon: '🩺' },
-    { name: 'Baby & Kids', icon: '🍼' },
-    { name: 'Appliances', icon: '🔌' },
-    { name: 'Other Useful Items', icon: '📦' },
+    { name: 'Books & Education', icon: <BookOpen size={22} strokeWidth={1.6} /> },
+    { name: 'Clothes', icon: <Shirt size={22} strokeWidth={1.6} /> },
+    { name: 'Furniture', icon: <Armchair size={22} strokeWidth={1.6} /> },
+    { name: 'Electronics', icon: <Laptop size={22} strokeWidth={1.6} /> },
+    { name: 'Toys', icon: <Puzzle size={22} strokeWidth={1.6} /> },
+    { name: 'Household Items', icon: <LampDesk size={22} strokeWidth={1.6} /> },
+    { name: 'Medical Equipment', icon: <Stethoscope size={22} strokeWidth={1.6} /> },
+    { name: 'Baby & Kids', icon: <Baby size={22} strokeWidth={1.6} /> },
+    { name: 'Appliances', icon: <Zap size={22} strokeWidth={1.6} /> },
+    { name: 'Other Useful Items', icon: <Package size={22} strokeWidth={1.6} /> },
   ];
 
   return (
@@ -74,7 +79,7 @@ export const Home: React.FC = () => {
       <section className="hero-section">
         <div>
           <div className="hero-eyebrow">
-            <span style={{ fontSize: '1.1rem' }}>🤝</span> KAITHAANGU · COMMUNITY GIVING
+            <Handshake size={18} strokeWidth={1.8} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px', color: 'var(--primary-blue)' }} /> KAITHAANGU · COMMUNITY GIVING
           </div>
 
           <Typography as="h1" className="hero-title-ml" malayalam>
@@ -116,7 +121,7 @@ export const Home: React.FC = () => {
           ==================================================================== */}
       <section className="trust-strip">
         <div className="trust-item">
-          <div className="trust-icon">🎁</div>
+          <div className="trust-icon"><Gift size={22} strokeWidth={1.8} /></div>
           <div>
             <div className="trust-title">100% FREE</div>
             <p className="trust-desc">No buying. No selling. No payments or prices involved.</p>
@@ -124,7 +129,7 @@ export const Home: React.FC = () => {
         </div>
 
         <div className="trust-item">
-          <div className="trust-icon">🌱</div>
+          <div className="trust-icon"><Sprout size={22} strokeWidth={1.8} /></div>
           <div>
             <div className="trust-title">COMMUNITY FIRST</div>
             <p className="trust-desc">Useful things reach people who genuinely need them.</p>
@@ -132,7 +137,7 @@ export const Home: React.FC = () => {
         </div>
 
         <div className="trust-item">
-          <div className="trust-icon">🛡️</div>
+          <div className="trust-icon"><ShieldCheck size={22} strokeWidth={1.8} /></div>
           <div>
             <div className="trust-title">SAFE & VERIFIED</div>
             <p className="trust-desc">User accounts and recipient verifications are reviewed for trust.</p>
@@ -161,7 +166,7 @@ export const Home: React.FC = () => {
 
             <div className="grid-responsive" style={{ marginTop: 'var(--space-8)' }}>
               <div style={{ textAlign: 'left', padding: 'var(--space-4)', backgroundColor: 'var(--soft-blue)', borderRadius: 'var(--radius-md)' }}>
-                <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-2)' }}>🤝</div>
+                <div style={{ marginBottom: 'var(--space-2)', color: 'var(--primary-blue)' }}><Gift size={24} strokeWidth={1.8} /></div>
                 <Typography as="h4" style={{ color: 'var(--primary-blue)', marginBottom: '4px' }}>100% സൗജന്യ പങ്കിടൽ</Typography>
                 <Typography variant="body-sm" color="secondary">
                   No prices, no fees, and no commercial transactions. Everything is shared freely.
@@ -169,7 +174,7 @@ export const Home: React.FC = () => {
               </div>
 
               <div style={{ textAlign: 'left', padding: 'var(--space-4)', backgroundColor: 'var(--soft-rose)', borderRadius: 'var(--radius-md)' }}>
-                <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-2)' }}>🛡️</div>
+                <div style={{ marginBottom: 'var(--space-2)', color: 'var(--secondary-rose-hover)' }}><ShieldCheck size={24} strokeWidth={1.8} /></div>
                 <Typography as="h4" style={{ color: 'var(--secondary-rose-hover)', marginBottom: '4px' }}>അന്തസ്സും വിശ്വസ്തതയും</Typography>
                 <Typography variant="body-sm" color="secondary">
                   Personal details and applicant verification reasons remain strictly private and reviewed by admins.
@@ -177,7 +182,7 @@ export const Home: React.FC = () => {
               </div>
 
               <div style={{ textAlign: 'left', padding: 'var(--space-4)', backgroundColor: 'var(--soft-gray)', borderRadius: 'var(--radius-md)' }}>
-                <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-2)' }}>🏡</div>
+                <div style={{ marginBottom: 'var(--space-2)', color: 'var(--ink)' }}><HomeIcon size={24} strokeWidth={1.8} /></div>
                 <Typography as="h4" style={{ color: 'var(--ink)', marginBottom: '4px' }}>പ്രദേശിക സഹായം</Typography>
                 <Typography variant="body-sm" color="secondary">
                   Connect donors and recipients within your local area across Kerala.
@@ -308,8 +313,9 @@ export const Home: React.FC = () => {
                           {item.condition}
                         </span>
                         {item.area && (
-                          <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--ink-secondary)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                            📍 {item.area}
+                          <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--ink-secondary)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                            <MapPin size={11} strokeWidth={2} style={{ flexShrink: 0 }} />
+                            <span>{item.area}</span>
                           </span>
                         )}
                       </div>
@@ -329,7 +335,7 @@ export const Home: React.FC = () => {
           </>
         ) : (
           <Card style={{ textAlign: 'center', padding: 'var(--space-10)' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-3)' }}>🌱</div>
+            <PackageOpen size={48} strokeWidth={1.5} style={{ color: 'var(--primary-blue)', margin: '0 auto var(--space-3) auto', display: 'block' }} />
             <Typography malayalam style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--primary-blue)', marginBottom: 'var(--space-2)' }}>
               “ഇപ്പോൾ പുതിയ സാധനങ്ങൾ ലഭ്യമാകാനായി കാത്തിരിക്കുകയാണ്.”
             </Typography>

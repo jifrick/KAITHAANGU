@@ -20,6 +20,7 @@ import { ItemView } from './pages/ItemView';
 import { AccountStatus } from './pages/AccountStatus';
 import { UpdatePassword } from './pages/UpdatePassword';
 import { Brand } from './components/common/Brand';
+import { Menu, X } from 'lucide-react';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, profile, loading } = useAuth();
@@ -250,8 +251,9 @@ const Navigation = () => {
           className="mobile-nav-toggle" 
           aria-label="Toggle navigation menu"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          {mobileMenuOpen ? '✕' : '☰'}
+          {mobileMenuOpen ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
         </button>
       </nav>
 

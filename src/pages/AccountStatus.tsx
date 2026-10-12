@@ -7,6 +7,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import type { RecipientVerification } from '../types/database';
+import { CheckCircle2, Clock, Lock, RefreshCw, AlertCircle, Handshake, Gift } from 'lucide-react';
 
 export const AccountStatus: React.FC = () => {
   const { user, profile, loading, signOut, refreshProfile } = useAuth();
@@ -146,7 +147,18 @@ export const AccountStatus: React.FC = () => {
                 marginBottom: 'var(--space-4)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '2rem' }}>⏳</span>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'var(--soft-blue)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--primary-blue)'
+                  }}>
+                    <Clock size={22} strokeWidth={2} />
+                  </div>
                   <div>
                     <h2 style={{
                       fontSize: '1.35rem',
@@ -163,7 +175,7 @@ export const AccountStatus: React.FC = () => {
                   </div>
                 </div>
 
-                <Badge status="pending" label="⏳ Admin പരിശോധനയിൽ" />
+                <Badge status="pending" label="Admin പരിശോധനയിൽ" />
               </div>
 
               <p style={{
@@ -206,7 +218,10 @@ export const AccountStatus: React.FC = () => {
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--soft-blue-border)'
                   }}>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--success-main)', fontWeight: 700 }}>✓ Step 01</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--success-text)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={12} strokeWidth={2.5} />
+                      <span>Step 01</span>
+                    </div>
                     <div style={{ fontSize: 'var(--fs-body-sm)', fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-malayalam)' }}>
                       Profile നൽകി
                     </div>
@@ -220,7 +235,10 @@ export const AccountStatus: React.FC = () => {
                     borderRadius: 'var(--radius-md)',
                     border: '2px solid var(--primary-blue)'
                   }}>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--primary-blue)', fontWeight: 700 }}>⏳ Step 02</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--primary-blue)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Clock size={12} strokeWidth={2.5} />
+                      <span>Step 02</span>
+                    </div>
                     <div style={{ fontSize: 'var(--fs-body-sm)', fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-malayalam)' }}>
                       Admin Review
                     </div>
@@ -235,7 +253,10 @@ export const AccountStatus: React.FC = () => {
                     border: '1px dashed var(--soft-gray)',
                     opacity: 0.75
                   }}>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', fontWeight: 700 }}>🔒 Step 03</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Lock size={12} strokeWidth={2.5} />
+                      <span>Step 03</span>
+                    </div>
                     <div style={{ fontSize: 'var(--fs-body-sm)', fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-malayalam)' }}>
                       Platform Access
                     </div>
@@ -285,9 +306,10 @@ export const AccountStatus: React.FC = () => {
                   size="md"
                   onClick={handleManualRefresh}
                   disabled={refreshing}
-                  style={{ fontFamily: 'var(--font-malayalam)' }}
+                  style={{ fontFamily: 'var(--font-malayalam)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
-                  {refreshing ? 'പരിശോധിക്കുന്നു...' : '🔄 Status വീണ്ടും പരിശോധിക്കുക'}
+                  <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+                  <span>{refreshing ? 'പരിശോധിക്കുന്നു...' : 'Status വീണ്ടും പരിശോധിക്കുക'}</span>
                 </Button>
               </div>
             </div>
@@ -305,7 +327,18 @@ export const AccountStatus: React.FC = () => {
                 marginBottom: 'var(--space-4)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '2.2rem' }}>🎉</span>
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    background: 'var(--success-bg)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--success-text)'
+                  }}>
+                    <CheckCircle2 size={24} strokeWidth={2.5} />
+                  </div>
                   <div>
                     <h2 style={{
                       fontSize: '1.4rem',
@@ -316,13 +349,13 @@ export const AccountStatus: React.FC = () => {
                     }}>
                       നിങ്ങളുടെ account approved ആയി!
                     </h2>
-                    <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--success-main)', fontWeight: 600 }}>
+                    <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--success-text)', fontWeight: 600 }}>
                       Account Approved & Active
                     </div>
                   </div>
                 </div>
 
-                <Badge status="approved" label="✓ Approved" />
+                <Badge status="approved" label="Approved" />
               </div>
 
               <p style={{
@@ -368,7 +401,18 @@ export const AccountStatus: React.FC = () => {
                 marginBottom: 'var(--space-4)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '2rem' }}>⚠️</span>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'var(--error-bg)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--danger)'
+                  }}>
+                    <AlertCircle size={22} strokeWidth={2} />
+                  </div>
                   <div>
                     <h2 style={{
                       fontSize: '1.35rem',
@@ -379,13 +423,13 @@ export const AccountStatus: React.FC = () => {
                     }}>
                       നിങ്ങളുടെ account ഇപ്പോൾ approve ചെയ്യാനായില്ല.
                     </h2>
-                    <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--error-main)', fontWeight: 600 }}>
+                    <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--danger)', fontWeight: 600 }}>
                       Account Not Approved
                     </div>
                   </div>
                 </div>
 
-                <Badge status="rejected" label="❌ Rejected" />
+                <Badge status="rejected" label="Not Approved" />
               </div>
 
               <p style={{
@@ -412,7 +456,18 @@ export const AccountStatus: React.FC = () => {
                 marginBottom: 'var(--space-4)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '2rem' }}>🔒</span>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'var(--warning-bg)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--warning-text)'
+                  }}>
+                    <Lock size={20} strokeWidth={2} />
+                  </div>
                   <div>
                     <h2 style={{
                       fontSize: '1.35rem',
@@ -423,13 +478,13 @@ export const AccountStatus: React.FC = () => {
                     }}>
                       നിങ്ങളുടെ account താൽക്കാലികമായി പരിമിതപ്പെടുത്തിയിരിക്കുന്നു.
                     </h2>
-                    <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--error-main)', fontWeight: 600 }}>
+                    <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--warning-text)', fontWeight: 600 }}>
                       Account Suspended
                     </div>
                   </div>
                 </div>
 
-                <Badge status="suspended" label="⚠️ Suspended" />
+                <Badge status="suspended" label="Suspended" />
               </div>
 
               <p style={{
@@ -464,7 +519,7 @@ export const AccountStatus: React.FC = () => {
               marginBottom: 'var(--space-2)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.25rem' }}>🤝</span>
+                <Handshake size={20} strokeWidth={2} style={{ color: 'var(--primary-blue)' }} />
                 <h3 style={{
                   fontSize: 'var(--fs-h4)',
                   fontWeight: 700,
@@ -479,11 +534,11 @@ export const AccountStatus: React.FC = () => {
               {verifLoading ? (
                 <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--ink-muted)' }}>പരിശോധിക്കുന്നു...</span>
               ) : verification?.status === 'approved' ? (
-                <Badge status="approved" label="✓ Recipient Verified" />
+                <Badge status="approved" label="Recipient Verified" />
               ) : verification?.status === 'rejected' ? (
-                <Badge status="rejected" label="❌ Verification Info Needed" />
+                <Badge status="rejected" label="Verification Info Needed" />
               ) : (
-                <Badge status="pending" label="⏳ Verification പരിശോധനയിൽ" />
+                <Badge status="pending" label="Verification പരിശോധനയിൽ" />
               )}
             </div>
 
@@ -530,7 +585,7 @@ export const AccountStatus: React.FC = () => {
                   marginBottom: '4px',
                   fontFamily: 'var(--font-malayalam)'
                 }}>
-                  🎁 നിങ്ങൾ Donor ആയി രജിസ്റ്റർ ചെയ്തിരിക്കുന്നു
+                  <Gift size={18} strokeWidth={1.8} style={{ color: 'var(--primary-blue)', flexShrink: 0, display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }} /> നിങ്ങൾ Donor ആയി രജിസ്റ്റർ ചെയ്തിരിക്കുന്നു
                 </h3>
                 <p style={{
                   fontSize: 'var(--fs-body-sm)',
