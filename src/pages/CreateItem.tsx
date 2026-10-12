@@ -53,6 +53,7 @@ export const CreateItem: React.FC = () => {
     
     if (images.length + files.length > 5) {
       setError('പരമാവധി 5 ഫോട്ടോകൾ മാത്രമേ ചേർക്കാനാകൂ. (Maximum 5 images allowed)');
+      e.target.value = '';
       return;
     }
     
@@ -71,7 +72,13 @@ export const CreateItem: React.FC = () => {
   };
 
   const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages(prev => {
+      const item = prev[index];
+      if (item?.previewUrl) {
+        URL.revokeObjectURL(item.previewUrl);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const validateDescription = (text: string) => {
@@ -436,7 +443,7 @@ export const CreateItem: React.FC = () => {
                       {images.length >= 5 ? 'പരമാവധി 5 ഫോട്ടോകൾ ചേർത്തു' : 'ഫോട്ടോകൾ തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ ഇങ്ങോട്ട് വലിച്ചിടുക'}
                     </div>
                     <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--ink-muted)', marginTop: '4px', fontFamily: 'var(--font-malayalam)' }}>
-                      JPG, PNG, WebP ഫോട്ടോകൾ ചേർക്കാം. വെളിച്ചമുള്ള യഥാർത്ഥ ഫോട്ടോകൾ സഹായകരമാണ്.
+                      JPG, PNG, WebP ഫോട്ടോകൾ ചേർക്കാം (പരമാവധി 5MB). വെളിച്ചമുള്ള യഥാർത്ഥ ഫോട്ടോകൾ സഹായകരമാണ്.
                     </div>
                   </div>
 

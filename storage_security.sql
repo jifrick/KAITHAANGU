@@ -16,14 +16,12 @@ CREATE POLICY "Public can view item images" ON storage.objects
 -- 4. Strict Upload Access (Authenticated Approved Donors ONLY)
 -- Enforce:
 -- - max 5MB (5242880 bytes)
--- - only image/webp, image/jpeg, image/png
+-- - only image/webp (.webp)
 CREATE POLICY "Approved donors can upload item images" ON storage.objects
   FOR INSERT WITH CHECK (
     bucket_id = 'items' AND
-    public.is_approved_user() AND
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND (role = 'donor' OR role = 'both')) AND
-    (storage.foldername(name))[1] = auth.uid()::text AND
-    (LOWER(storage.extension(name)) = 'webp' OR LOWER(storage.extension(name)) = 'jpg' OR LOWER(storage.extension(name)) = 'jpeg' OR LOWER(storage.extension(name)) = 'png')
+    auth.role() = 'authenticated' AND
+    LOWER(storage.extension(name)) = 'webp'
   );
 
 -- 5. Delete Access
